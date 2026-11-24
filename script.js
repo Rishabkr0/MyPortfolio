@@ -112,78 +112,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   // ------------------------------------------------------------------------
-  // 5. HELLOAKRITI CARD CURSOR-FOLLOWING BADGE ("live preview ↗")
-  // ------------------------------------------------------------------------
-  const projectCards = document.querySelectorAll('.project-card');
-
-  projectCards.forEach(card => {
-    const mediaWrap = card.querySelector('.project-media-wrap');
-    if (!mediaWrap) return;
-
-    // Create or locate the cursor badge
-    let cursorBadge = mediaWrap.querySelector('.card-cursor-badge');
-    if (!cursorBadge) {
-      cursorBadge = document.createElement('div');
-      cursorBadge.className = 'card-cursor-badge';
-      cursorBadge.innerHTML = 'live preview <span style="font-size: 11px;">↗</span>';
-      mediaWrap.appendChild(cursorBadge);
-    }
-
-    let targetX = 0;
-    let targetY = 0;
-    let currentX = 0;
-    let currentY = 0;
-    let isHovered = false;
-    let rafId = null;
-
-    const lerp = (start, end, factor) => start + (end - start) * factor;
-
-    const animateBadge = () => {
-      if (!isHovered && Math.abs(targetX - currentX) < 0.1 && Math.abs(targetY - currentY) < 0.1) {
-        cancelAnimationFrame(rafId);
-        rafId = null;
-        return;
-      }
-
-      currentX = lerp(currentX, targetX, 0.18);
-      currentY = lerp(currentY, targetY, 0.18);
-
-      cursorBadge.style.transform = `translate3d(${currentX}px, ${currentY}px, 0) translate(-50%, -50%) scale(${isHovered ? 1 : 0.8})`;
-
-      rafId = requestAnimationFrame(animateBadge);
-    };
-
-    mediaWrap.addEventListener('mouseenter', (e) => {
-      isHovered = true;
-      const rect = mediaWrap.getBoundingClientRect();
-      currentX = targetX = e.clientX - rect.left;
-      currentY = targetY = e.clientY - rect.top;
-
-      cursorBadge.style.opacity = '1';
-      if (!rafId) {
-        rafId = requestAnimationFrame(animateBadge);
-      }
-    });
-
-    mediaWrap.addEventListener('mousemove', (e) => {
-      const rect = mediaWrap.getBoundingClientRect();
-      targetX = e.clientX - rect.left;
-      targetY = e.clientY - rect.top;
-
-      if (!rafId) {
-        rafId = requestAnimationFrame(animateBadge);
-      }
-    });
-
-    mediaWrap.addEventListener('mouseleave', () => {
-      isHovered = false;
-      cursorBadge.style.opacity = '0';
-    });
-  });
-
-
-  // ------------------------------------------------------------------------
-  // 6. SERVICES ACCORDION (HelloAkriti Non-Exclusive Expandable Rows)
+  // 5. SERVICES ACCORDION (HelloAkriti Non-Exclusive Expandable Rows)
   // ------------------------------------------------------------------------
   const accordionItems = document.querySelectorAll('.service-accordion-item');
 
