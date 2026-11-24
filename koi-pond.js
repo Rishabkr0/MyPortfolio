@@ -147,22 +147,22 @@ class KoiPond {
   spawnPresetSchool() {
     this.koi = [];
 
-    // Configurations designed to mirror the reference placement
+    // Configurations positioned on the right and gliding partially behind the text
     const configs = [
-      // 1. Large Alpha Sanke (bottom right, diagonal swim)
-      { xRatio: 0.72, yRatio: 0.55, type: 'sanke', scale: 1.25, angle: -0.75, speed: 0.95 },
-      // 2. Large Kohaku (top left, facing down-right)
-      { xRatio: 0.16, yRatio: 0.35, type: 'kohaku', scale: 1.15, angle: 0.8, speed: 0.9 },
-      // 3. Medium Pale Sanke (top center, facing down)
-      { xRatio: 0.42, yRatio: 0.22, type: 'sanke', scale: 0.95, angle: 1.57, speed: 0.85 },
-      // 4. Medium Sanke (center right, gliding gently)
-      { xRatio: 0.58, yRatio: 0.38, type: 'sanke', scale: 1.0, angle: -1.4, speed: 1.0 },
-      // 5. Cobalt Indigo Koi (left middle)
-      { xRatio: 0.28, yRatio: 0.68, type: 'cobalt', scale: 0.8, angle: 0.6, speed: 1.2 },
-      // 6. Swift Cobalt Minnow 1 (swimming near top-right)
-      { xRatio: 0.82, yRatio: 0.28, type: 'minnow', scale: 0.65, angle: -2.1, speed: 1.4 },
-      // 7. Swift Cobalt Minnow 2 (center wanderer)
-      { xRatio: 0.48, yRatio: 0.72, type: 'minnow', scale: 0.6, angle: 2.8, speed: 1.35 }
+      // 1. Large Alpha Sanke (right-center, swimming diagonally behind right edge of text)
+      { xRatio: 0.78, yRatio: 0.48, type: 'sanke', scale: 1.25, angle: -0.65, speed: 0.95 },
+      // 2. Large Kohaku (top-right, swimming left-downward toward text)
+      { xRatio: 0.68, yRatio: 0.22, type: 'kohaku', scale: 1.15, angle: 1.1, speed: 0.9 },
+      // 3. Medium Pale Sanke (right middle, swimming softly)
+      { xRatio: 0.88, yRatio: 0.35, type: 'sanke', scale: 0.95, angle: -1.8, speed: 0.85 },
+      // 4. Medium Sanke (center-right, right behind text line 2)
+      { xRatio: 0.54, yRatio: 0.38, type: 'sanke', scale: 1.0, angle: 0.4, speed: 1.0 },
+      // 5. Cobalt Indigo Koi (lower right)
+      { xRatio: 0.72, yRatio: 0.74, type: 'cobalt', scale: 0.85, angle: -1.2, speed: 1.15 },
+      // 6. Swift Cobalt Minnow 1 (far right top)
+      { xRatio: 0.92, yRatio: 0.22, type: 'minnow', scale: 0.65, angle: -2.4, speed: 1.4 },
+      // 7. Swift Cobalt Minnow 2 (right lower quadrant)
+      { xRatio: 0.62, yRatio: 0.68, type: 'minnow', scale: 0.6, angle: 2.5, speed: 1.35 }
     ];
 
     configs.forEach(cfg => {
@@ -431,13 +431,17 @@ class PixelKoi {
   }
 
   pickNewWanderTarget() {
-    const margin = 80;
+    const margin = 50;
     const w = this.pond.width || 800;
     const h = this.pond.height || 600;
 
-    this.wanderTargetX = margin + Math.random() * (w - margin * 2);
+    // Bias wander target to the right side (from 38% of screen to far right edge)
+    // This keeps the fish swimming predominantly on the right and gliding just behind the text!
+    const minX = Math.max(w * 0.38, 280);
+    const maxX = w - margin;
+    this.wanderTargetX = minX + Math.random() * Math.max(maxX - minX, 100);
     this.wanderTargetY = margin + Math.random() * (h - margin * 2);
-    this.wanderTimer = 3.5 + Math.random() * 4.5;
+    this.wanderTimer = 3.2 + Math.random() * 4.2;
   }
 
   update(dt) {
@@ -511,12 +515,14 @@ class PixelKoi {
 
     this.angle += diff * Math.min(this.turnSpeed * dt, 1);
 
-    // 5. Margin Repulsion (keep inside canvas)
-    const margin = 50;
+    // 5. Margin Repulsion (keep primarily on the right and inside canvas)
+    const margin = 45;
     const w = this.pond.width;
     const h = this.pond.height;
 
-    if (this.x < margin) this.angle += (0 - this.angle) * 0.1;
+    // If drifting too far left past the text, gently steer back to the right
+    const leftLimit = Math.max(w * 0.32, 220);
+    if (this.x < leftLimit) this.angle += (0 - this.angle) * 0.12;
     if (this.x > w - margin) this.angle += (Math.PI - this.angle) * 0.1;
     if (this.y < margin) this.angle += (Math.PI / 2 - this.angle) * 0.1;
     if (this.y > h - margin) this.angle += (-Math.PI / 2 - this.angle) * 0.1;
