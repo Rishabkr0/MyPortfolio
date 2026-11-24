@@ -64,6 +64,27 @@ class KoiPond {
     this.init();
   }
 
+  getTextBounds() {
+    // Calculates bounding box of the big text container in canvas-relative pixels
+    const heroText = document.querySelector('.hero-headline-wrap') || document.querySelector('.hero-content');
+    if (!heroText) {
+      return {
+        right: Math.min(this.width * 0.48, 540),
+        bottom: Math.min(this.height * 0.52, 320)
+      };
+    }
+
+    const rect = heroText.getBoundingClientRect();
+    const canvasRect = this.canvas.getBoundingClientRect();
+
+    return {
+      left: 0,
+      right: Math.max((rect.right - canvasRect.left) + 28, 240),
+      top: 0,
+      bottom: Math.max((rect.bottom - canvasRect.top) + 24, 200)
+    };
+  }
+
   init() {
     this.handleResize();
     window.addEventListener('resize', () => this.handleResize());
@@ -147,22 +168,22 @@ class KoiPond {
   spawnPresetSchool() {
     this.koi = [];
 
-    // Configurations positioned on the right and gliding partially behind the text
+    // Configurations strictly on the right side and bottom of the text by default
     const configs = [
-      // 1. Large Alpha Sanke (right-center, swimming diagonally behind right edge of text)
-      { xRatio: 0.78, yRatio: 0.48, type: 'sanke', scale: 1.25, angle: -0.65, speed: 0.95 },
-      // 2. Large Kohaku (top-right, swimming left-downward toward text)
-      { xRatio: 0.68, yRatio: 0.22, type: 'kohaku', scale: 1.15, angle: 1.1, speed: 0.9 },
-      // 3. Medium Pale Sanke (right middle, swimming softly)
-      { xRatio: 0.88, yRatio: 0.35, type: 'sanke', scale: 0.95, angle: -1.8, speed: 0.85 },
-      // 4. Medium Sanke (center-right, right behind text line 2)
-      { xRatio: 0.54, yRatio: 0.38, type: 'sanke', scale: 1.0, angle: 0.4, speed: 1.0 },
-      // 5. Cobalt Indigo Koi (lower right)
-      { xRatio: 0.72, yRatio: 0.74, type: 'cobalt', scale: 0.85, angle: -1.2, speed: 1.15 },
+      // 1. Large Alpha Sanke (right side)
+      { xRatio: 0.84, yRatio: 0.38, type: 'sanke', scale: 1.25, angle: -0.65, speed: 0.95 },
+      // 2. Large Kohaku (right side upper)
+      { xRatio: 0.74, yRatio: 0.22, type: 'kohaku', scale: 1.15, angle: 1.1, speed: 0.9 },
+      // 3. Medium Pale Sanke (far right)
+      { xRatio: 0.90, yRatio: 0.58, type: 'sanke', scale: 0.95, angle: -1.8, speed: 0.85 },
+      // 4. Medium Sanke (bottom of text)
+      { xRatio: 0.32, yRatio: 0.85, type: 'sanke', scale: 1.0, angle: 0.2, speed: 1.0 },
+      // 5. Cobalt Indigo Koi (bottom of text, wandering right)
+      { xRatio: 0.52, yRatio: 0.88, type: 'cobalt', scale: 0.85, angle: -0.4, speed: 1.15 },
       // 6. Swift Cobalt Minnow 1 (far right top)
-      { xRatio: 0.92, yRatio: 0.22, type: 'minnow', scale: 0.65, angle: -2.4, speed: 1.4 },
-      // 7. Swift Cobalt Minnow 2 (right lower quadrant)
-      { xRatio: 0.62, yRatio: 0.68, type: 'minnow', scale: 0.6, angle: 2.5, speed: 1.35 }
+      { xRatio: 0.94, yRatio: 0.16, type: 'minnow', scale: 0.65, angle: -2.4, speed: 1.4 },
+      // 7. Swift Cobalt Minnow 2 (bottom-right area)
+      { xRatio: 0.76, yRatio: 0.82, type: 'minnow', scale: 0.6, angle: 2.5, speed: 1.35 }
     ];
 
     configs.forEach(cfg => {
@@ -431,23 +452,38 @@ class PixelKoi {
   }
 
   pickNewWanderTarget() {
-    const margin = 50;
+    const margin = 45;
     const w = this.pond.width || 800;
     const h = this.pond.height || 600;
+    const bounds = this.pond.getTextBounds();
 
-    // Bias wander target to the right side (from 38% of screen to far right edge)
-    // This keeps the fish swimming predominantly on the right and gliding just behind the text!
-    const minX = Math.max(w * 0.38, 280);
-    const maxX = w - margin;
-    this.wanderTargetX = minX + Math.random() * Math.max(maxX - minX, 100);
-    this.wanderTargetY = margin + Math.random() * (h - margin * 2);
+    // Default wandering strictly in Zone 1 (Right of text) or Zone 2 (Bottom of text)
+    const canGoRight = bounds.right < w - margin;
+    const canGoBottom = bounds.bottom < h - margin;
+
+    const chooseRight = (canGoRight && !canGoBottom) || (canGoRight && Math.random() < 0.65);
+
+    if (chooseRight) {
+      // Zone 1: Exclusively to the right side of the text
+      const minX = bounds.right + 20;
+      const maxX = w - margin;
+      this.wanderTargetX = minX + Math.random() * Math.max(maxX - minX, 40);
+      this.wanderTargetY = margin + Math.random() * (h - margin * 2);
+    } else {
+      // Zone 2: Exclusively to the bottom of the text
+      const minY = bounds.bottom + 20;
+      const maxY = h - margin;
+      this.wanderTargetX = margin + Math.random() * (w - margin * 2);
+      this.wanderTargetY = minY + Math.random() * Math.max(maxY - minY, 40);
+    }
+
     this.wanderTimer = 3.2 + Math.random() * 4.2;
   }
 
   update(dt) {
     this.wigglePhase += dt * this.wiggleFreq * (this.speed / this.baseSpeed);
 
-    // 1. Check for Food Pellets
+    // 1. Check for Food Pellets (Feeding can take fish anywhere on the canvas!)
     let targetX = this.wanderTargetX;
     let targetY = this.wanderTargetY;
     let huntingFood = false;
@@ -515,17 +551,36 @@ class PixelKoi {
 
     this.angle += diff * Math.min(this.turnSpeed * dt, 1);
 
-    // 5. Margin Repulsion (keep primarily on the right and inside canvas)
+    // 5. Text Exclusion Zone: Disallow swimming around or behind big text by default
+    // Note: When huntingFood is true (user clicked to feed), koi are free to go anywhere!
+    if (!huntingFood) {
+      const bounds = this.pond.getTextBounds();
+
+      // If inside the text exclusion zone (upper-left quadrant containing the big text)
+      if (this.x < bounds.right && this.y < bounds.bottom) {
+        // Find shortest exit: either steer right (to open right side) or steer down (to bottom water)
+        const distRight = bounds.right - this.x;
+        const distBottom = bounds.bottom - this.y;
+
+        const escapeAngle = distRight <= distBottom ? 0 : Math.PI / 2;
+        let escDiff = escapeAngle - this.angle;
+        while (escDiff < -Math.PI) escDiff += Math.PI * 2;
+        while (escDiff > Math.PI) escDiff -= Math.PI * 2;
+
+        this.angle += escDiff * 0.28;
+        this.speed = Math.max(this.speed, this.baseSpeed * 1.5);
+      }
+    }
+
+    // 6. Canvas Outer Margin Repulsion
     const margin = 45;
     const w = this.pond.width;
     const h = this.pond.height;
 
-    // If drifting too far left past the text, gently steer back to the right
-    const leftLimit = Math.max(w * 0.32, 220);
-    if (this.x < leftLimit) this.angle += (0 - this.angle) * 0.12;
-    if (this.x > w - margin) this.angle += (Math.PI - this.angle) * 0.1;
-    if (this.y < margin) this.angle += (Math.PI / 2 - this.angle) * 0.1;
-    if (this.y > h - margin) this.angle += (-Math.PI / 2 - this.angle) * 0.1;
+    if (this.x < margin) this.angle += (0 - this.angle) * 0.12;
+    if (this.x > w - margin) this.angle += (Math.PI - this.angle) * 0.12;
+    if (this.y < margin) this.angle += (Math.PI / 2 - this.angle) * 0.12;
+    if (this.y > h - margin) this.angle += (-Math.PI / 2 - this.angle) * 0.12;
 
     // Dampen speed back to base
     this.speed += (this.baseSpeed - this.speed) * dt * 2;
