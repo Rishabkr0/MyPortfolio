@@ -12,7 +12,7 @@
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@1,6..72,400;1,6..72,600&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
 
   <!-- Pure Custom Stylesheet -->
-  <link rel="stylesheet" href="style.css?v=3">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
@@ -30,6 +30,7 @@
 
         <!-- Desktop Navigation -->
         <nav class="site-nav" aria-label="Main Navigation">
+          <a href="#pond" class="nav-link active">pond</a>
           <a href="#work" class="nav-link">projects</a>
           <a href="#services" class="nav-link">services</a>
           <a href="#explorations" class="nav-link">explorations</a>
@@ -63,6 +64,7 @@
 
     <!-- Collapsible Mobile Drawer -->
     <div class="mobile-nav-drawer" id="mobileNavDrawer">
+      <a href="#pond" class="nav-link">pond</a>
       <a href="#work" class="nav-link">projects</a>
       <a href="#services" class="nav-link">services</a>
       <a href="#explorations" class="nav-link">explorations</a>
@@ -72,16 +74,18 @@
 
   <main>
     <!-- ==========================================
-         SECTION 1: HERO (Warm Paper Canvas)
+         SECTION 1: HERO (With Pixel-Square Koi Swimming Behind Text)
          ========================================== -->
-    <section class="hero-section section-wrapper">
-      <!-- Playful editorial micro-confetti squares (Stitch & HelloAkriti pop-in motif) -->
-      <span class="confetti confetti-1"></span>
-      <span class="confetti confetti-2"></span>
-      <span class="confetti confetti-3"></span>
-      <span class="confetti confetti-4"></span>
-      <span class="confetti confetti-5"></span>
-      <span class="confetti confetti-6"></span>
+    <section class="hero-section section-wrapper" id="pond">
+      <!-- Interactive HTML5 Pixel Koi Canvas (Floating Behind Original Text) -->
+      <canvas id="koiPondCanvas" class="koi-pond-canvas" aria-label="Interactive pixel koi pond canvas simulation"></canvas>
+
+      <!-- Ambient Drifting Mosaic Square Tiles -->
+      <span class="pixel-tile-drifter drifter-1"></span>
+      <span class="pixel-tile-drifter drifter-2"></span>
+      <span class="pixel-tile-drifter drifter-3"></span>
+      <span class="pixel-tile-drifter drifter-4"></span>
+      <span class="pixel-tile-drifter drifter-5"></span>
 
       <div class="container hero-content">
         <!-- Monospace Overline Status -->
@@ -124,6 +128,15 @@
             </a>
           </div>
         </div>
+
+        <!-- Interactive Koi Pond Micro-HUD at Bottom -->
+        <div class="pond-hud reveal-on-scroll">
+          <div class="hud-counters">
+            <span class="hud-item"><span class="hud-label">koi</span> <strong id="koiCount">07</strong></span>
+            <span class="hud-item"><span class="hud-label">food</span> <strong id="foodCount">00</strong></span>
+          </div>
+          <span class="hud-hint">• click canvas to feed swimming pixel koi</span>
+        </div>
       </div>
     </section>
 
@@ -136,6 +149,7 @@
         <div class="section-head reveal-on-scroll">
           <div>
             <span class="caption-caps section-meta-tag">
+              <span class="square-matrix-badge"><span class="sq-cell on"></span><span class="sq-cell on"></span><span class="sq-cell"></span><span class="sq-cell on orange"></span></span>
               01 / archive of verified deployments
             </span>
             <h2 class="headline-xl" style="color: var(--surface-lowest);">
@@ -153,9 +167,10 @@
           <!-- Card 1: CASPER -->
           <article class="project-card reveal-on-scroll">
             <div class="project-media-wrap" data-lightbox="true" data-lightbox-title="C.A.S.P.E.R Autonomous AI Assistant">
+              <div class="card-square-corners"><span class="c-sq c-tl">■</span><span class="c-sq c-tr">■</span><span class="c-sq c-bl">■</span><span class="c-sq c-br">■</span></div>
               <img id="casperImg" class="project-img" src="assets/images/casper-studio.png" alt="C.A.S.P.E.R Autonomous AI Desktop Assistant with studio controls and neural model">
               <div class="project-floating-badge">
-                <span class="pill-badge pill-badge-dark">FLAGSHIP AI</span>
+                <span class="pill-badge pill-badge-dark"><span class="sq-icon-dot">■</span> FLAGSHIP AI</span>
               </div>
               <div class="project-interactive-bar">
                 <button type="button" class="project-thumb-switch active" data-switch-target="casperImg" data-img-src="assets/images/casper-studio.png" data-img-alt="Casper Studio GUI">
@@ -183,9 +198,10 @@
           <!-- Card 2: ToolHub -->
           <article class="project-card reveal-on-scroll reveal-delay-1">
             <div class="project-media-wrap" data-lightbox="true" data-lightbox-title="ToolHub All-in-One Privacy-First Tools">
+              <div class="card-square-corners"><span class="c-sq c-tl">■</span><span class="c-sq c-tr">■</span><span class="c-sq c-bl">■</span><span class="c-sq c-br">■</span></div>
               <img id="toolhubImg" class="project-img" src="assets/images/toolhub-hero.jpg" alt="ToolHub client-side PDF and document processing engine">
               <div class="project-floating-badge">
-                <span class="pill-badge pill-badge-dark">100% IN-BROWSER</span>
+                <span class="pill-badge pill-badge-dark"><span class="sq-icon-dot">■</span> 100% IN-BROWSER</span>
               </div>
               <div class="project-interactive-bar">
                 <button type="button" class="project-thumb-switch active" data-switch-target="toolhubImg" data-img-src="assets/images/toolhub-hero.jpg" data-img-alt="ToolHub Platform Landing Page">
@@ -213,9 +229,10 @@
           <!-- Card 3: RCODE Systems -->
           <article class="project-card reveal-on-scroll">
             <div class="project-media-wrap" data-lightbox="true" data-lightbox-title="RCODE Systems & Interface Architectures">
+              <div class="card-square-corners"><span class="c-sq c-tl">■</span><span class="c-sq c-tr">■</span><span class="c-sq c-bl">■</span><span class="c-sq c-br">■</span></div>
               <img id="rcodeImg" class="project-img" src="assets/images/rcode-hero.jpg" alt="RCODE high fidelity interface architectures and frontend clones">
               <div class="project-floating-badge">
-                <span class="pill-badge pill-badge-dark">VANILLA JAVASCRIPT</span>
+                <span class="pill-badge pill-badge-dark"><span class="sq-icon-dot">■</span> VANILLA JS</span>
               </div>
               <div class="project-interactive-bar">
                 <button type="button" class="project-thumb-switch active" data-switch-target="rcodeImg" data-img-src="assets/images/rcode-hero.jpg" data-img-alt="RCODE Hero & Architecture">
@@ -243,6 +260,7 @@
           <!-- Card 4: CodeVerse IDE -->
           <article class="project-card reveal-on-scroll reveal-delay-1">
             <div class="project-media-wrap">
+              <div class="card-square-corners"><span class="c-sq c-tl">■</span><span class="c-sq c-tr">■</span><span class="c-sq c-bl">■</span><span class="c-sq c-br">■</span></div>
               <!-- Custom Interactive IDE Preview -->
               <div class="codeverse-mock">
                 <div class="codeverse-topbar">
@@ -832,7 +850,9 @@
     </div>
   </div>
 
+  <!-- Koi Pond Simulation Script -->
+  <script src="koi-pond.js"></script>
   <!-- Pure Vanilla JavaScript -->
-  <script src="script.js?v=3"></script>
+  <script src="script.js"></script>
 </body>
 </html>
