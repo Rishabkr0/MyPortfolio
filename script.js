@@ -217,78 +217,368 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   // ------------------------------------------------------------------------
-  // 9. DYNAMIC AUDIO VISUALIZER CANVAS (Explorations Section)
+  // 9. A* PATHFINDING CANVAS & SORTING RACE (Explorations Section)
   // ------------------------------------------------------------------------
-  const audioCanvas = document.getElementById('audioVisualizerCanvas');
-  if (audioCanvas) {
-    const ctx = audioCanvas.getContext('2d');
-    let time = 0;
+  // Card 1: A* Pathfinding Grid Simulation
+  const pathCanvas = document.getElementById('pathfindingCanvas');
+  const pathCounter = document.getElementById('pathStepsCounter');
+  if (pathCanvas) {
+    const pCtx = pathCanvas.getContext('2d');
+    const cols = 18;
+    const rows = 11;
+    let grid = [];
+    const start = { c: 2, r: 5 };
+    const end = { c: 15, r: 5 };
+    let openSet = [];
+    let closedSet = [];
+    let path = [];
+    let state = 'searching';
+    let pauseCounter = 0;
 
-    const resizeCanvas = () => {
-      const rect = audioCanvas.getBoundingClientRect();
-      audioCanvas.width = rect.width * (window.devicePixelRatio || 1);
-      audioCanvas.height = rect.height * (window.devicePixelRatio || 1);
+    const initPathGrid = () => {
+      grid = [];
+      openSet = [];
+      closedSet = [];
+      path = [];
+      state = 'searching';
+      pauseCounter = 0;
+
+      for (let r = 0; r < rows; r++) {
+        const row = [];
+        for (let c = 0; c < cols; c++) {
+          row.push({
+            c, r,
+            isWall: false,
+            g: Infinity,
+            h: 0,
+            f: Infinity,
+            parent: null
+          });
+        }
+        grid.push(row);
+      }
+
+      // Procedural walls with randomized openings
+      const gap1 = 2 + Math.floor(Math.random() * (rows - 4));
+      const gap2 = 2 + Math.floor(Math.random() * (rows - 4));
+      for (let r = 0; r < rows; r++) {
+        if (Math.abs(r - gap1) > 1) grid[r][6].isWall = true;
+        if (Math.abs(r - gap2) > 1) grid[r][11].isWall = true;
+      }
+      grid[start.r][start.c].isWall = false;
+      grid[end.r][end.c].isWall = false;
+
+      const startNode = grid[start.r][start.c];
+      startNode.g = 0;
+      startNode.h = Math.abs(start.c - end.c) + Math.abs(start.r - end.r);
+      startNode.f = startNode.h;
+      openSet.push(startNode);
     };
 
-    window.addEventListener('resize', resizeCanvas);
-    resizeCanvas();
+    const resizePathCanvas = () => {
+      const rect = pathCanvas.getBoundingClientRect();
+      pathCanvas.width = rect.width * (window.devicePixelRatio || 1);
+      pathCanvas.height = rect.height * (window.devicePixelRatio || 1);
+    };
+    window.addEventListener('resize', resizePathCanvas);
+    resizePathCanvas();
+    initPathGrid();
 
-    const renderAudioWave = () => {
-      if (!ctx) return;
-      const w = audioCanvas.width;
-      const h = audioCanvas.height;
+    let stepTick = 0;
+    const runPathStep = () => {
+      if (state === 'searching') {
+        if (openSet.length > 0) {
+          let lowestIdx = 0;
+          for (let i = 1; i < openSet.length; i++) {
+            if (openSet[i].f < openSet[lowestIdx].f) lowestIdx = i;
+          }
+          const current = openSet.splice(lowestIdx, 1)[0];
+          closedSet.push(current);
 
-      ctx.fillStyle = '#0a0a09';
-      ctx.fillRect(0, 0, w, h);
+          if (pathCounter) {
+            pathCounter.textContent = `visited: ${closedSet.length} / ${cols * rows}`;
+          }
 
-      // Fine oscilloscope background grid
-      ctx.strokeStyle = 'rgba(51, 51, 46, 0.4)';
-      ctx.lineWidth = 1;
-      const gridStep = 24 * (window.devicePixelRatio || 1);
-      for (let x = 0; x < w; x += gridStep) {
-        ctx.beginPath();
-        ctx.moveTo(x, 0);
-        ctx.lineTo(x, h);
-        ctx.stroke();
-      }
-      for (let y = 0; y < h; y += gridStep) {
-        ctx.beginPath();
-        ctx.moveTo(0, y);
-        ctx.lineTo(w, y);
-        ctx.stroke();
-      }
-
-      // Three layered frequency waves
-      const waves = [
-        { color: 'rgba(60, 148, 232, 0.9)', speed: 0.04, amp: 0.28, freq: 0.015, offset: 0 },
-        { color: 'rgba(195, 235, 56, 0.8)', speed: 0.03, amp: 0.20, freq: 0.022, offset: 2 },
-        { color: 'rgba(255, 175, 210, 0.7)', speed: 0.05, amp: 0.15, freq: 0.030, offset: 4 }
-      ];
-
-      waves.forEach(wave => {
-        ctx.beginPath();
-        ctx.strokeStyle = wave.color;
-        ctx.lineWidth = 2 * (window.devicePixelRatio || 1);
-
-        for (let x = 0; x < w; x++) {
-          const ny = Math.sin(x * wave.freq + time * wave.speed + wave.offset) * 
-                     Math.cos(x * 0.005 + time * 0.02) * (h * wave.amp);
-          const y = h / 2 + ny;
-
-          if (x === 0) {
-            ctx.moveTo(x, y);
+          if (current.c === end.c && current.r === end.r) {
+            let temp = current;
+            path = [];
+            while (temp) {
+              path.push(temp);
+              temp = temp.parent;
+            }
+            state = 'found';
+            if (pathCounter) {
+              pathCounter.textContent = `solved: ${path.length} steps ✓`;
+            }
           } else {
-            ctx.lineTo(x, y);
+            const neighbors = [
+              { c: current.c + 1, r: current.r },
+              { c: current.c - 1, r: current.r },
+              { c: current.c, r: current.r + 1 },
+              { c: current.c, r: current.r - 1 }
+            ];
+            for (const n of neighbors) {
+              if (n.c >= 0 && n.c < cols && n.r >= 0 && n.r < rows) {
+                const neighbor = grid[n.r][n.c];
+                if (!neighbor.isWall && !closedSet.includes(neighbor)) {
+                  const tentativeG = current.g + 1;
+                  if (!openSet.includes(neighbor)) {
+                    neighbor.g = tentativeG;
+                    neighbor.h = Math.abs(neighbor.c - end.c) + Math.abs(neighbor.r - end.r);
+                    neighbor.f = neighbor.g + neighbor.h;
+                    neighbor.parent = current;
+                    openSet.push(neighbor);
+                  } else if (tentativeG < neighbor.g) {
+                    neighbor.g = tentativeG;
+                    neighbor.f = neighbor.g + neighbor.h;
+                    neighbor.parent = current;
+                  }
+                }
+              }
+            }
+          }
+        } else {
+          state = 'pause';
+        }
+      } else if (state === 'found' || state === 'pause') {
+        pauseCounter++;
+        if (pauseCounter > 110) {
+          initPathGrid();
+        }
+      }
+    };
+
+    const drawPathGrid = () => {
+      if (!pCtx) return;
+      const w = pathCanvas.width;
+      const h = pathCanvas.height;
+      const cellW = w / cols;
+      const cellH = h / rows;
+
+      pCtx.fillStyle = '#0a0b0e';
+      pCtx.fillRect(0, 0, w, h);
+
+      // Grid lines
+      pCtx.strokeStyle = 'rgba(255, 255, 255, 0.04)';
+      pCtx.lineWidth = 1;
+      for (let c = 0; c <= cols; c++) {
+        pCtx.beginPath();
+        pCtx.moveTo(c * cellW, 0);
+        pCtx.lineTo(c * cellW, h);
+        pCtx.stroke();
+      }
+      for (let r = 0; r <= rows; r++) {
+        pCtx.beginPath();
+        pCtx.moveTo(0, r * cellH);
+        pCtx.lineTo(w, r * cellH);
+        pCtx.stroke();
+      }
+
+      // Walls
+      for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+          if (grid[r][c].isWall) {
+            pCtx.fillStyle = '#22252e';
+            pCtx.fillRect(c * cellW + 2, r * cellH + 2, cellW - 4, cellH - 4);
           }
         }
-        ctx.stroke();
-      });
+      }
 
-      time += 1;
-      requestAnimationFrame(renderAudioWave);
+      // Closed set (visited cells)
+      for (const node of closedSet) {
+        pCtx.fillStyle = 'rgba(30, 64, 175, 0.35)';
+        pCtx.fillRect(node.c * cellW + 2, node.r * cellH + 2, cellW - 4, cellH - 4);
+        pCtx.strokeStyle = 'rgba(59, 130, 246, 0.45)';
+        pCtx.strokeRect(node.c * cellW + 2, node.r * cellH + 2, cellW - 4, cellH - 4);
+      }
+
+      // Open set (frontier cells)
+      for (const node of openSet) {
+        pCtx.fillStyle = 'rgba(59, 130, 246, 0.2)';
+        pCtx.fillRect(node.c * cellW + 2, node.r * cellH + 2, cellW - 4, cellH - 4);
+      }
+
+      // Reconstructed shortest path (Terracotta Orange)
+      if (path.length > 0) {
+        for (const node of path) {
+          pCtx.fillStyle = '#ea580c';
+          pCtx.fillRect(node.c * cellW + 3, node.r * cellH + 3, cellW - 6, cellH - 6);
+        }
+      }
+
+      // Start & End points
+      pCtx.fillStyle = '#2563eb';
+      pCtx.fillRect(start.c * cellW + 3, start.r * cellH + 3, cellW - 6, cellH - 6);
+
+      pCtx.fillStyle = '#ea580c';
+      pCtx.fillRect(end.c * cellW + 3, end.r * cellH + 3, cellW - 6, cellH - 6);
+
+      stepTick++;
+      if (stepTick % 2 === 0) {
+        runPathStep();
+      }
+
+      requestAnimationFrame(drawPathGrid);
     };
 
-    renderAudioWave();
+    drawPathGrid();
+  }
+
+  // Card 2: Sorting Algorithm Race Simulation (Quicksort with pivot highlight)
+  const sortCanvas = document.getElementById('sortingCanvas');
+  const sortCounter = document.getElementById('sortSwapsCounter');
+  if (sortCanvas) {
+    const sCtx = sortCanvas.getContext('2d');
+    const barCount = 18;
+    let array = [];
+    let state = 'sorting';
+    let pauseCounter = 0;
+    let pivot = -1;
+    let comparingA = -1;
+    let comparingB = -1;
+    let swaps = 0;
+    let comparisons = 0;
+    let steps = [];
+
+    const initSort = () => {
+      array = [];
+      for (let i = 0; i < barCount; i++) {
+        array.push(Math.floor(20 + Math.random() * 75));
+      }
+      swaps = 0;
+      comparisons = 0;
+      state = 'sorting';
+      pauseCounter = 0;
+      pivot = -1;
+      comparingA = -1;
+      comparingB = -1;
+
+      // Pre-compute quicksort steps
+      steps = [];
+      const arrCopy = [...array];
+
+      const partition = (low, high) => {
+        const pVal = arrCopy[high];
+        let i = low - 1;
+        steps.push({ type: 'pivot', idx: high });
+        for (let j = low; j < high; j++) {
+          steps.push({ type: 'compare', i: j, j: high });
+          if (arrCopy[j] < pVal) {
+            i++;
+            const temp = arrCopy[i];
+            arrCopy[i] = arrCopy[j];
+            arrCopy[j] = temp;
+            steps.push({ type: 'swap', i, j, arr: [...arrCopy] });
+          }
+        }
+        const temp = arrCopy[i + 1];
+        arrCopy[i + 1] = arrCopy[high];
+        arrCopy[high] = temp;
+        steps.push({ type: 'swap', i: i + 1, j: high, arr: [...arrCopy] });
+        return i + 1;
+      };
+
+      const quickSort = (low, high) => {
+        if (low < high) {
+          const pi = partition(low, high);
+          quickSort(low, pi - 1);
+          quickSort(pi + 1, high);
+        }
+      };
+
+      quickSort(0, arrCopy.length - 1);
+      steps.push({ type: 'done' });
+    };
+
+    const resizeSortCanvas = () => {
+      const rect = sortCanvas.getBoundingClientRect();
+      sortCanvas.width = rect.width * (window.devicePixelRatio || 1);
+      sortCanvas.height = rect.height * (window.devicePixelRatio || 1);
+    };
+    window.addEventListener('resize', resizeSortCanvas);
+    resizeSortCanvas();
+    initSort();
+
+    let sortTick = 0;
+    const runSortStep = () => {
+      if (state === 'sorting' && steps.length > 0) {
+        const step = steps.shift();
+        if (step.type === 'pivot') {
+          pivot = step.idx;
+        } else if (step.type === 'compare') {
+          comparingA = step.i;
+          comparingB = step.j;
+          comparisons++;
+          if (sortCounter) sortCounter.textContent = `cmp: ${comparisons} • swp: ${swaps}`;
+        } else if (step.type === 'swap') {
+          array = step.arr;
+          comparingA = step.i;
+          comparingB = step.j;
+          swaps++;
+          if (sortCounter) sortCounter.textContent = `cmp: ${comparisons} • swp: ${swaps}`;
+        } else if (step.type === 'done') {
+          state = 'sorted';
+          pivot = -1;
+          comparingA = -1;
+          comparingB = -1;
+          if (sortCounter) sortCounter.textContent = `sorted! [O(n log n)]`;
+        }
+      } else if (state === 'sorted') {
+        pauseCounter++;
+        if (pauseCounter > 90) {
+          initSort();
+        }
+      }
+    };
+
+    const drawSortBars = () => {
+      if (!sCtx) return;
+      const w = sortCanvas.width;
+      const h = sortCanvas.height;
+      const barW = (w - (barCount + 1) * 6) / barCount;
+
+      sCtx.fillStyle = '#0a0b0e';
+      sCtx.fillRect(0, 0, w, h);
+
+      // Subtle horizontal baseline
+      sCtx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
+      sCtx.lineWidth = 1;
+      sCtx.beginPath();
+      sCtx.moveTo(0, h - 16);
+      sCtx.lineTo(w, h - 16);
+      sCtx.stroke();
+
+      for (let i = 0; i < array.length; i++) {
+        const val = array[i];
+        const barH = (val / 100) * (h - 40);
+        const x = 6 + i * (barW + 6);
+        const y = h - 18 - barH;
+
+        if (state === 'sorted') {
+          sCtx.fillStyle = '#22c55e';
+        } else if (i === pivot) {
+          sCtx.fillStyle = '#ea580c';
+        } else if (i === comparingA || i === comparingB) {
+          sCtx.fillStyle = '#3b82f6';
+        } else {
+          sCtx.fillStyle = '#27272a';
+        }
+
+        sCtx.fillRect(x, y, barW, barH);
+        // Small top accent cap
+        sCtx.fillStyle = 'rgba(255, 255, 255, 0.25)';
+        sCtx.fillRect(x, y, barW, 2);
+      }
+
+      sortTick++;
+      if (sortTick % 3 === 0) {
+        runSortStep();
+      }
+
+      requestAnimationFrame(drawSortBars);
+    };
+
+    drawSortBars();
   }
 
 

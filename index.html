@@ -623,92 +623,100 @@
         <div class="explorations-head reveal-on-scroll">
           <div>
             <span class="caption-caps explorations-meta-tag">
-              04 / lab &amp; hackathon sandbox
+              04 / dsa labs &amp; student sandbox
             </span>
             <h2 class="headline-xl explorations-title">
               creative explorations
             </h2>
           </div>
           <p class="body-sm explorations-desc-text">
-            Experimental UI canvases, algorithmic visualizers, audio transformers, and SRMU robotics prototypes.
+            Mini algorithm visualizers, canvas experiments, and utility scripts built between 2nd-year CS lectures and lab assignments.
           </p>
         </div>
 
         <!-- Akriti-Style Angled Tilted Showcase Mosaic -->
         <div class="explorations-cards-grid">
-          <!-- Angled Card 1 -->
+          <!-- Angled Card 1: A* Pathfinding Grid -->
           <div class="exploration-card tilt-left reveal-on-scroll">
             <div class="exploration-media-box">
-              <canvas id="audioVisualizerCanvas" class="audio-visualizer-canvas"></canvas>
+              <canvas id="pathfindingCanvas" class="pathfinding-canvas"></canvas>
+              <div class="canvas-mini-overlay">
+                <span class="overlay-tag"><span class="sq-dot-blue">■</span> A* search</span>
+                <span id="pathStepsCounter" class="overlay-counter">visited: 0</span>
+              </div>
             </div>
             <div class="exploration-info-row">
-              <h4 class="headline-md exploration-title" style="font-size: 1.125rem;">ambient listener</h4>
-              <span class="caption-caps exploration-badge">audio agent</span>
+              <h4 class="headline-md exploration-title" style="font-size: 1.125rem;">a* grid pathfinder</h4>
+              <span class="caption-caps exploration-badge">dsa / graph search</span>
             </div>
             <p class="body-sm exploration-desc">
-              Continuous microphone frequency analyzer with real-time spectrum drawing on an unbuffered HTML5 Canvas.
+              Square tile visualizer stepping through Manhattan heuristic pathfinding around random maze barriers with live step costs.
             </p>
           </div>
 
-          <!-- Angled Card 2 (Inverted angle) -->
+          <!-- Angled Card 2: Sorting Algorithm Race -->
           <div class="exploration-card tilt-right reveal-on-scroll reveal-delay-1">
             <div class="exploration-media-box">
-              <div class="wasm-benchmark-box">
-                <div style="display: flex; justify-content: space-between; font-size: 0.6875rem; color: #8a8a82;">
-                  <span>Raw Buffer: 1.84 MB</span>
-                  <span style="color: var(--confetti-lime);">Brotli WASM: 312 KB</span>
-                </div>
-                <div style="background: #20201e; height: 10px; border-radius: 9999px; overflow: hidden; position: relative;">
-                  <div style="background: var(--confetti-orange); height: 100%; width: 100%;"></div>
-                  <div style="background: var(--primary-container); height: 100%; width: 17%; position: absolute; top: 0; left: 0;"></div>
-                </div>
-                <div style="display: flex; justify-content: space-between; font-size: 0.625rem; color: #c0c7d3;">
-                  <span>Shrinkage ratio: 83.1%</span>
-                  <span style="color: var(--primary-container);">Duration: 6.4ms</span>
-                </div>
+              <canvas id="sortingCanvas" class="sorting-canvas"></canvas>
+              <div class="canvas-mini-overlay">
+                <span class="overlay-tag"><span class="sq-dot-orange">■</span> quicksort lab</span>
+                <span id="sortSwapsCounter" class="overlay-counter">O(n log n)</span>
               </div>
             </div>
             <div class="exploration-info-row">
-              <h4 class="headline-md exploration-title" style="font-size: 1.125rem;">wasm compressor</h4>
-              <span class="caption-caps exploration-badge">c++ to wasm</span>
+              <h4 class="headline-md exploration-title" style="font-size: 1.125rem;">sorting race lab</h4>
+              <span class="caption-caps exploration-badge">divide &amp; conquer</span>
             </div>
             <p class="body-sm exploration-desc">
-              Compiling native Brotli algorithms into browser-compatible WebAssembly binaries for instant payload shrinkage.
+              Side-by-side array partition comparison showing pivot selections, recursion depth, and swap comparisons on random arrays.
             </p>
           </div>
 
-          <!-- Angled Card 3 -->
+          <!-- Angled Card 3: 75% Attendance & Bunk Planner -->
           <div class="exploration-card tilt-slight reveal-on-scroll reveal-delay-2">
             <div class="exploration-media-box">
-              <div class="context-graph-box">
-                <svg width="100%" height="100%" viewBox="0 0 300 200" style="display: block;">
-                  <line x1="50" y1="100" x2="150" y2="50" stroke="#33332E" stroke-width="1.5" />
-                  <line x1="150" y1="50" x2="250" y2="100" stroke="#33332E" stroke-width="1.5" />
-                  <line x1="50" y1="100" x2="150" y2="150" stroke="#33332E" stroke-width="1.5" />
-                  <line x1="150" y1="150" x2="250" y2="100" stroke="#33332E" stroke-width="1.5" />
-                  <line x1="150" y1="50" x2="150" y2="150" stroke="#3c94e8" stroke-width="1.5" stroke-dasharray="4" />
-
-                  <!-- Nodes -->
-                  <circle cx="50" cy="100" r="12" fill="#1C1C1A" stroke="#3c94e8" stroke-width="2" />
-                  <text x="50" y="104" font-size="8" fill="#FFFFF7" text-anchor="middle" font-family="JetBrains Mono">USER</text>
-
-                  <circle cx="150" cy="50" r="16" fill="#1C1C1A" stroke="#C3EB38" stroke-width="2" />
-                  <text x="150" y="53" font-size="8" fill="#FFFFF7" text-anchor="middle" font-family="JetBrains Mono">MEM0</text>
-
-                  <circle cx="150" cy="150" r="16" fill="#1C1C1A" stroke="#ffafd2" stroke-width="2" />
-                  <text x="150" y="153" font-size="8" fill="#FFFFF7" text-anchor="middle" font-family="JetBrains Mono">CACHE</text>
-
-                  <circle cx="250" cy="100" r="18" fill="#1C1C1A" stroke="#3c94e8" stroke-width="2" />
-                  <text x="250" y="103" font-size="8" fill="#FFFFF7" text-anchor="middle" font-family="JetBrains Mono">GEMINI</text>
-                </svg>
+              <div class="attendance-calc-box">
+                <div class="attendance-header">
+                  <div class="attendance-dots">
+                    <span></span><span></span><span></span>
+                  </div>
+                  <span class="attendance-title">srmu_attendance.py</span>
+                  <span class="attendance-chip">Sem 3 / CSE</span>
+                </div>
+                <div class="attendance-body">
+                  <div class="att-row">
+                    <span class="att-sub">Data Structures (CS201)</span>
+                    <span class="att-stat att-safe">84.2%</span>
+                    <span class="att-tag att-tag-safe">+3 safe</span>
+                  </div>
+                  <div class="att-row">
+                    <span class="att-sub">Comp Org &amp; Arch (CS203)</span>
+                    <span class="att-stat att-warn">76.5%</span>
+                    <span class="att-tag att-tag-warn">borderline</span>
+                  </div>
+                  <div class="att-row">
+                    <span class="att-sub">Discrete Maths (CS205)</span>
+                    <span class="att-stat att-safe">88.9%</span>
+                    <span class="att-tag att-tag-safe">+5 safe</span>
+                  </div>
+                  <div class="att-row">
+                    <span class="att-sub">Python &amp; Oops Lab (CS207)</span>
+                    <span class="att-stat att-safe">92.0%</span>
+                    <span class="att-tag att-tag-safe">+4 safe</span>
+                  </div>
+                </div>
+                <div class="attendance-footer">
+                  <span class="att-rule">Mandatory ≥ 75% rule</span>
+                  <span class="att-status-badge">Eligible for End-Sem ✓</span>
+                </div>
               </div>
             </div>
             <div class="exploration-info-row">
-              <h4 class="headline-md exploration-title" style="font-size: 1.125rem;">context graph v2</h4>
-              <span class="caption-caps exploration-badge">memory index</span>
+              <h4 class="headline-md exploration-title" style="font-size: 1.125rem;">75% attendance calc</h4>
+              <span class="caption-caps exploration-badge">college utility</span>
             </div>
             <p class="body-sm exploration-desc">
-              Visual dynamic tree graph plotting conversational recall nodes and weighted semantic associations.
+              Semester attendance forecaster written to model lecture thresholds, calculating safe bunk quotas before exam debarment.
             </p>
           </div>
         </div>
@@ -718,11 +726,11 @@
           <div class="hackathon-banner-left">
             <span class="banner-pulse-beacon"></span>
             <span class="body-md banner-text">
-              Next competitive sprint: SRMU TechFest Hackathon • Building offline-first mesh communications
+              Next sprint: Preparing for the upcoming SRMU annual hackathon • Always open to teaming up with batchmates
             </span>
           </div>
           <a href="https://github.com/Rishabkr0" target="_blank" rel="noopener noreferrer" class="btn-pill btn-pill-graphite">
-            track experiments ↗
+            view github repos ↗
           </a>
         </div>
       </div>
