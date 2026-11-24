@@ -74,11 +74,10 @@
 
   <main>
     <!-- ==========================================
-         SECTION 1: HERO — INTERACTIVE SQUARE MOSAIC KOI POND
-         Inspired by Kai Linh's Tactile Pixel Pond Aesthetic
+         SECTION 1: HERO (With Pixel-Square Koi Swimming Behind Text)
          ========================================== -->
-    <section class="hero-section hero-pond-section section-wrapper" id="pond">
-      <!-- Interactive HTML5 Pixel Koi Canvas -->
+    <section class="hero-section section-wrapper" id="pond">
+      <!-- Interactive HTML5 Pixel Koi Canvas (Floating Behind Original Text) -->
       <canvas id="koiPondCanvas" class="koi-pond-canvas" aria-label="Interactive pixel koi pond canvas simulation"></canvas>
 
       <!-- Ambient Drifting Mosaic Square Tiles -->
@@ -88,63 +87,55 @@
       <span class="pixel-tile-drifter drifter-4"></span>
       <span class="pixel-tile-drifter drifter-5"></span>
 
-      <div class="container hero-pond-layout">
-        <!-- Top Row: Left Monospace Quote + Right Studio Profile Card -->
-        <div class="hero-pond-top">
-          <!-- Top Left Monospace Poetic Status (Directly from Reference) -->
-          <div class="pond-quote-tag reveal-on-scroll">
-            <span class="mono-line">in a sea of noise,</span>
-            <span class="mono-line">build resilient systems.</span>
-          </div>
+      <div class="container hero-content">
+        <!-- Monospace Overline Status -->
+        <div class="status-badge-row reveal-on-scroll">
+          <span class="beacon-dot beacon-dot-pulse"></span>
+          <span class="caption-caps" style="color: var(--text-muted); letter-spacing: 0.08em;">
+            lucknow, in — 2nd year cse @ srmu — available for builds
+          </span>
+        </div>
 
-          <!-- Top Right Developer Studio Profile (Directly from Reference) -->
-          <div class="hero-studio-card reveal-on-scroll reveal-delay-1">
-            <h2 class="studio-title">A one-developer studio for resilient things.</h2>
-            <p class="studio-desc">
-              Autonomous AI workflows like Casper, privacy-first engines like ToolHub,
-              and zero-server web utilities of architectural craft.
-              Made with intent in Lucknow, for people who value speed.
+        <!-- Hero Headline with Pill Accents Flowing Directly -->
+        <div class="hero-headline-wrap reveal-on-scroll reveal-delay-1">
+          <h1 class="display-hero hero-title">
+            building resilient software<br>
+            <span class="hero-title-line2">
+              <span>and ai products</span>
+              <span class="pill-badge">( AI &amp; ML )</span>
+              <span class="pill-badge">( FULL-STACK )</span>
+              <span class="pill-badge">( OFFLINE-FIRST )</span>
+            </span>
+          </h1>
+        </div>
+
+        <!-- Subtitle & Quick Actions Matrix -->
+        <div class="hero-grid-sub reveal-on-scroll reveal-delay-2">
+          <div>
+            <p class="body-lg hero-bio">
+              2nd year CSE undergraduate at Shri Ramswaroop Memorial University crafting intelligent, human-centered web tools, autonomous Gemini 3.1 workflows, and zero-server utilities for people who value speed, privacy, and architectural craft.
             </p>
-            <div class="studio-links">
-              <a href="https://github.com/Rishabkr0" target="_blank" rel="noopener noreferrer">github</a>
-              <span class="slash-sep">/</span>
-              <a href="https://linkedin.com/in/rishab-kumar" target="_blank" rel="noopener noreferrer">linkedin</a>
-              <span class="slash-sep">/</span>
-              <a href="#work">projects</a>
-              <span class="slash-sep">/</span>
-              <a href="#contact">email</a>
-            </div>
+          </div>
+          <div class="hero-actions-wrap">
+            <a href="#work" class="btn-pill btn-pill-dark">
+              explore work ↓
+            </a>
+            <a href="https://github.com/Rishabkr0" target="_blank" rel="noopener noreferrer" class="btn-pill btn-pill-subtle">
+              github: rishabkr0 ↗
+            </a>
+            <a href="#contact" class="btn-pill btn-pill-subtle">
+              get in touch ↗
+            </a>
           </div>
         </div>
 
-        <!-- Bottom Row: Left Live Pond HUD + Right Giant Signature Title (Kai Linh layout) -->
-        <div class="hero-pond-bottom">
-          <!-- Bottom Left HUD: koi 07, food 00, tap to feed -->
-          <div class="pond-hud reveal-on-scroll">
-            <div class="hud-counters">
-              <span class="hud-item"><span class="hud-label">koi</span> <strong id="koiCount">07</strong></span>
-              <span class="hud-item"><span class="hud-label">food</span> <strong id="foodCount">00</strong></span>
-            </div>
-            <span class="hud-hint">• click canvas to feed &amp; ripple</span>
+        <!-- Interactive Koi Pond Micro-HUD at Bottom -->
+        <div class="pond-hud reveal-on-scroll">
+          <div class="hud-counters">
+            <span class="hud-item"><span class="hud-label">koi</span> <strong id="koiCount">07</strong></span>
+            <span class="hud-item"><span class="hud-label">food</span> <strong id="foodCount">00</strong></span>
           </div>
-
-          <!-- Bottom Right Giant Title (Huge Bold Cobalt Blue Typography) -->
-          <div class="hero-giant-name reveal-on-scroll reveal-delay-2">
-            <h1 class="giant-name-text">Rishab Kumar</h1>
-            <div class="giant-name-meta">
-              <span class="meta-tag">2nd year cse @ srmu</span>
-              <span class="square-dot">■</span>
-              <span class="meta-tag">full-stack &amp; ai products</span>
-              <div class="hero-quick-cta">
-                <a href="#work" class="btn-pill btn-pill-cobalt">
-                  explore work ↓
-                </a>
-                <a href="#contact" class="btn-pill btn-pill-subtle">
-                  start a project ↗
-                </a>
-              </div>
-            </div>
-          </div>
+          <span class="hud-hint">• click canvas to feed swimming pixel koi</span>
         </div>
       </div>
     </section>

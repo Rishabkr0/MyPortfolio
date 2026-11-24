@@ -743,19 +743,19 @@ ul, ol {
 }
 
 /* --------------------------------------------------------------------------
-   9. SECTION 1: HERO — INTERACTIVE PIXEL KOI POND (Kai Linh Reference)
+   9. SECTION 1: HERO — WITH PIXEL KOI POND FLOATING BEHIND ORIGINAL TEXT
    -------------------------------------------------------------------------- */
-.hero-pond-section {
+.hero-section {
   position: relative;
   width: 100%;
   min-height: calc(100vh - 4rem);
   background-color: var(--canvas-paper);
+  padding-top: calc(4.5rem + var(--space-xl));
+  padding-bottom: var(--space-3xl);
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  padding-top: 5.5rem;
-  padding-bottom: 3rem;
+  justify-content: center;
 }
 
 .koi-pond-canvas {
@@ -764,134 +764,106 @@ ul, ol {
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 1;
+  z-index: 0; /* Floats directly behind original text */
   pointer-events: auto;
   cursor: crosshair;
 }
 
-.hero-pond-layout {
+.hero-content {
   position: relative;
   z-index: 2;
-  width: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  min-height: calc(100vh - 12rem);
-  pointer-events: none; /* Allows clicks to pass through to canvas */
+  gap: var(--space-xl);
+  pointer-events: none; /* Allows clicks to reach koi canvas behind */
 }
 
-.hero-pond-top {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: 2rem;
-  width: 100%;
-}
-
-@media (min-width: 768px) {
-  .hero-pond-top {
-    flex-direction: row;
-    align-items: flex-start;
-  }
-}
-
-/* Top Left Monospace Poetic Quote */
-.pond-quote-tag {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  font-family: var(--font-mono);
-  font-size: 0.9375rem;
-  color: var(--text-dark);
-  letter-spacing: -0.01em;
-  line-height: 1.45;
-  pointer-events: auto;
-  user-select: none;
-}
-
-.pond-quote-tag .mono-line:first-child {
-  color: var(--text-secondary);
-}
-
-.pond-quote-tag .mono-line:last-child {
-  font-weight: 600;
-  color: var(--cobalt-deep);
-}
-
-/* Top Right Studio Profile Card */
-.hero-studio-card {
-  max-width: 32rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  text-align: left;
+/* Ensure all interactive buttons, pills, links inside hero receive mouse events */
+.hero-content a,
+.hero-content button,
+.hero-content .pill-badge,
+.hero-content .pond-hud,
+.hero-content .status-badge-row {
   pointer-events: auto;
 }
 
-@media (min-width: 768px) {
-  .hero-studio-card {
-    text-align: right;
-    align-items: flex-end;
-  }
-}
-
-.studio-title {
-  font-family: var(--font-display);
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: var(--cobalt-vibrant);
-  line-height: 1.35;
-  margin: 0;
-  letter-spacing: -0.02em;
-}
-
-.studio-desc {
-  font-family: var(--font-mono);
-  font-size: 0.8125rem;
-  color: var(--text-secondary);
-  line-height: 1.6;
-  margin: 0;
-}
-
-.studio-links {
+.status-badge-row {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  color: var(--text-dark);
+  gap: var(--space-sm);
 }
 
-.studio-links a {
-  color: var(--text-dark);
-  text-decoration: underline;
-  text-underline-offset: 3px;
-  transition: color var(--duration-fast);
+.beacon-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-full);
+  background-color: var(--confetti-lime);
+  display: inline-block;
 }
 
-.studio-links a:hover {
-  color: var(--cobalt-vibrant);
+.beacon-dot-pulse {
+  animation: pulse-beacon 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
-.studio-links .slash-sep {
-  opacity: 0.35;
+@keyframes pulse-beacon {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.4;
+    transform: scale(1.2);
+  }
 }
 
-/* Bottom Row: HUD on left, Giant Name on right */
-.hero-pond-bottom {
+.hero-headline-wrap {
+  position: relative;
+}
+
+.hero-title {
+  margin: 0;
+  color: var(--surface-lowest);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+.hero-title-line2 {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  column-gap: 0.75rem;
+  row-gap: 0.5rem;
+}
+
+.hero-grid-sub {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-lg);
+  align-items: flex-end;
+  padding-top: var(--space-md);
+}
+
+@media (min-width: 1024px) {
+  .hero-grid-sub {
+    grid-template-columns: 7fr 5fr;
+  }
+}
+
+.hero-bio {
+  color: var(--surface-high);
+  max-width: 44rem;
+  line-height: 1.65;
+}
+
+.hero-actions-wrap {
   display: flex;
-  flex-direction: column-reverse;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 2.5rem;
-  width: 100%;
-  margin-top: 3.5rem;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  justify-content: flex-start;
 }
 
-@media (min-width: 768px) {
-  .hero-pond-bottom {
-    flex-direction: row;
-    align-items: flex-end;
+@media (min-width: 1024px) {
+  .hero-actions-wrap {
+    justify-content: flex-end;
   }
 }
 
@@ -903,8 +875,10 @@ ul, ol {
   font-family: var(--font-mono);
   font-size: 0.75rem;
   color: var(--text-muted);
-  pointer-events: auto;
   user-select: none;
+  padding-top: var(--space-md);
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  max-width: 22rem;
 }
 
 .hud-counters {
@@ -927,71 +901,7 @@ ul, ol {
 
 .hud-hint {
   font-size: 0.6875rem;
-  opacity: 0.7;
-}
-
-/* Bottom Right Giant Name (Matching Kai Linh in Cobalt Blue) */
-.hero-giant-name {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 0.625rem;
-  pointer-events: auto;
-}
-
-@media (min-width: 768px) {
-  .hero-giant-name {
-    align-items: flex-end;
-    text-align: right;
-  }
-}
-
-.giant-name-text {
-  font-family: var(--font-display);
-  font-size: clamp(3.5rem, 8.5vw, 6.75rem);
-  font-weight: 800;
-  line-height: 0.92;
-  letter-spacing: -0.04em;
-  color: var(--cobalt-deep);
-  margin: 0;
-  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
-  user-select: none;
-}
-
-.giant-name-meta {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.625rem;
-  font-family: var(--font-mono);
-  font-size: 0.8125rem;
-  color: var(--text-secondary);
-}
-
-.square-dot {
-  color: var(--terracotta-koi);
-  font-size: 0.5rem;
-  vertical-align: middle;
-}
-
-.hero-quick-cta {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-top: 0.25rem;
-}
-
-.btn-pill-cobalt {
-  background-color: var(--cobalt-deep);
-  color: #FFFFFF;
-  border: 1px solid transparent;
-}
-
-.btn-pill-cobalt:hover {
-  background-color: var(--cobalt-vibrant);
-  color: #FFFFFF;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 14px rgba(30, 64, 175, 0.3);
+  opacity: 0.75;
 }
 
 /* Ambient Drifting Square Tiles */
