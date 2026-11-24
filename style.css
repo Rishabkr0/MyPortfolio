@@ -217,12 +217,12 @@ ul, ol {
 
 .display-hero {
   font-family: var(--font-display);
-  font-size: clamp(2.25rem, 5.2vw, 5.25rem);
+  font-size: clamp(2.25rem, 5vw, 5.25rem);
   font-weight: 800;
   line-height: 0.94;
   letter-spacing: -0.04em;
   text-transform: lowercase;
-  white-space: nowrap;
+  white-space: nowrap !important;
 }
 
 .headline-xl {
@@ -819,22 +819,22 @@ ul, ol {
 
 .hero-headline-wrap {
   position: relative;
-  white-space: nowrap;
+  white-space: nowrap !important;
 }
 
 .hero-title {
   margin: 0;
   color: var(--surface-lowest);
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
-  white-space: nowrap;
+  white-space: nowrap !important;
 }
 
 .hero-title-line2 {
-  display: inline-flex;
-  flex-wrap: nowrap;
+  display: inline-flex !important;
+  flex-wrap: nowrap !important;
   align-items: center;
   column-gap: 0.75rem;
-  white-space: nowrap;
+  white-space: nowrap !important;
 }
 
 @media (max-width: 768px) {
