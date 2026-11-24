@@ -147,22 +147,22 @@ class KoiPond {
   spawnPresetSchool() {
     this.koi = [];
 
-    // Configurations positioned on the right and gliding partially behind the text
+    // Configurations strictly on the right side or along the bottom of the text
     const configs = [
-      // 1. Large Alpha Sanke (right-center, swimming diagonally behind right edge of text)
-      { xRatio: 0.78, yRatio: 0.48, type: 'sanke', scale: 1.25, angle: -0.65, speed: 0.95 },
-      // 2. Large Kohaku (top-right, swimming left-downward toward text)
-      { xRatio: 0.68, yRatio: 0.22, type: 'kohaku', scale: 1.15, angle: 1.1, speed: 0.9 },
-      // 3. Medium Pale Sanke (right middle, swimming softly)
-      { xRatio: 0.88, yRatio: 0.35, type: 'sanke', scale: 0.95, angle: -1.8, speed: 0.85 },
-      // 4. Medium Sanke (center-right, right behind text line 2)
-      { xRatio: 0.54, yRatio: 0.38, type: 'sanke', scale: 1.0, angle: 0.4, speed: 1.0 },
-      // 5. Cobalt Indigo Koi (lower right)
-      { xRatio: 0.72, yRatio: 0.74, type: 'cobalt', scale: 0.85, angle: -1.2, speed: 1.15 },
-      // 6. Swift Cobalt Minnow 1 (far right top)
-      { xRatio: 0.92, yRatio: 0.22, type: 'minnow', scale: 0.65, angle: -2.4, speed: 1.4 },
-      // 7. Swift Cobalt Minnow 2 (right lower quadrant)
-      { xRatio: 0.62, yRatio: 0.68, type: 'minnow', scale: 0.6, angle: 2.5, speed: 1.35 }
+      // 1. Large Alpha Sanke (Right side)
+      { xRatio: 0.84, yRatio: 0.38, type: 'sanke', scale: 1.25, angle: -0.85, speed: 0.95 },
+      // 2. Large Kohaku (Right top)
+      { xRatio: 0.88, yRatio: 0.18, type: 'kohaku', scale: 1.15, angle: 1.8, speed: 0.9 },
+      // 3. Medium Pale Sanke (Bottom right)
+      { xRatio: 0.76, yRatio: 0.78, type: 'sanke', scale: 0.95, angle: -2.2, speed: 0.85 },
+      // 4. Medium Sanke (Bottom area underneath the text)
+      { xRatio: 0.35, yRatio: 0.85, type: 'sanke', scale: 1.0, angle: 0.2, speed: 1.0 },
+      // 5. Cobalt Indigo Koi (Right middle)
+      { xRatio: 0.92, yRatio: 0.58, type: 'cobalt', scale: 0.85, angle: -1.4, speed: 1.15 },
+      // 6. Swift Cobalt Minnow 1 (Bottom area wanderer)
+      { xRatio: 0.52, yRatio: 0.88, type: 'minnow', scale: 0.65, angle: 3.1, speed: 1.4 },
+      // 7. Swift Cobalt Minnow 2 (Right side top)
+      { xRatio: 0.78, yRatio: 0.12, type: 'minnow', scale: 0.6, angle: 1.2, speed: 1.35 }
     ];
 
     configs.forEach(cfg => {
@@ -174,6 +174,34 @@ class KoiPond {
     if (this.hudKoi) {
       this.hudKoi.textContent = String(this.koi.length).padStart(2, '0');
     }
+  }
+
+  getTextExclusionBox() {
+    // Calculates bounding area of the hero headline/content so koi do not swim behind or around it by default
+    const headline = document.querySelector('.hero-headline-wrap');
+    if (!headline || !this.canvas) {
+      return {
+        left: 0,
+        top: 0,
+        right: (this.width || 800) * 0.65,
+        bottom: (this.height || 600) * 0.52
+      };
+    }
+
+    const cRect = this.canvas.getBoundingClientRect();
+    const hRect = headline.getBoundingClientRect();
+
+    // Clearance buffer so koi don't crowd the text boundaries
+    const buffer = 45;
+    const right = Math.min((hRect.right - cRect.left) + buffer, this.width - 120);
+    const bottom = Math.min((hRect.bottom - cRect.top) + buffer, this.height - 80);
+
+    return {
+      left: 0,
+      top: 0,
+      right: Math.max(right, 260),
+      bottom: Math.max(bottom, 220)
+    };
   }
 
   addFood(x, y) {
@@ -434,13 +462,31 @@ class PixelKoi {
     const margin = 50;
     const w = this.pond.width || 800;
     const h = this.pond.height || 600;
+    const box = this.pond.getTextExclusionBox();
 
-    // Bias wander target to the right side (from 38% of screen to far right edge)
-    // This keeps the fish swimming predominantly on the right and gliding just behind the text!
-    const minX = Math.max(w * 0.38, 280);
-    const maxX = w - margin;
-    this.wanderTargetX = minX + Math.random() * Math.max(maxX - minX, 100);
-    this.wanderTargetY = margin + Math.random() * (h - margin * 2);
+    // "Make sure there are either on the right side or on the bottom of the text by default."
+    const canDoBottom = box.bottom < (h - margin - 50);
+    const canDoRight = box.right < (w - margin - 60);
+
+    let chooseBottom = false;
+    if (canDoBottom && canDoRight) {
+      // 50% right side, 50% bottom area below text
+      chooseBottom = Math.random() < 0.5;
+    } else if (canDoBottom) {
+      chooseBottom = true;
+    }
+
+    if (chooseBottom) {
+      // Zone: Bottom area underneath the text
+      this.wanderTargetX = margin + Math.random() * (w - margin * 2);
+      this.wanderTargetY = box.bottom + Math.random() * Math.max(h - margin - box.bottom, 60);
+    } else {
+      // Zone: Right side of the text
+      const minX = Math.min(box.right + 10, w - 180);
+      this.wanderTargetX = minX + Math.random() * Math.max(w - margin - minX, 100);
+      this.wanderTargetY = margin + Math.random() * (h - margin * 2);
+    }
+
     this.wanderTimer = 3.2 + Math.random() * 4.2;
   }
 
@@ -448,6 +494,7 @@ class PixelKoi {
     this.wigglePhase += dt * this.wiggleFreq * (this.speed / this.baseSpeed);
 
     // 1. Check for Food Pellets
+    // "Feeding can take them anywhere btw"
     let targetX = this.wanderTargetX;
     let targetY = this.wanderTargetY;
     let huntingFood = false;
@@ -462,7 +509,7 @@ class PixelKoi {
         const dx = f.x - this.x;
         const dy = f.y - this.y;
         const d = Math.hypot(dx, dy);
-        if (d < closestDist && d < 480) {
+        if (d < closestDist && d < 650) {
           closestDist = d;
           closestFood = f;
         }
@@ -471,7 +518,7 @@ class PixelKoi {
       if (closestFood) {
         targetX = closestFood.x;
         targetY = closestFood.y;
-        huntingFood = true;
+        huntingFood = true; // Feeding allows swimming anywhere!
 
         // Eat food when reached
         if (closestDist < 16 * this.scale) {
@@ -515,17 +562,48 @@ class PixelKoi {
 
     this.angle += diff * Math.min(this.turnSpeed * dt, 1);
 
-    // 5. Margin Repulsion (keep primarily on the right and inside canvas)
+    // 5. Margin Repulsion & Text Exclusion Zone
     const margin = 45;
     const w = this.pond.width;
     const h = this.pond.height;
 
-    // If drifting too far left past the text, gently steer back to the right
-    const leftLimit = Math.max(w * 0.32, 220);
-    if (this.x < leftLimit) this.angle += (0 - this.angle) * 0.12;
-    if (this.x > w - margin) this.angle += (Math.PI - this.angle) * 0.1;
-    if (this.y < margin) this.angle += (Math.PI / 2 - this.angle) * 0.1;
-    if (this.y > h - margin) this.angle += (-Math.PI / 2 - this.angle) * 0.1;
+    // Canvas boundary margins
+    if (this.x < margin) this.angle += (0 - this.angle) * 0.14;
+    if (this.x > w - margin) this.angle += (Math.PI - this.angle) * 0.14;
+    if (this.y < margin) this.angle += (Math.PI / 2 - this.angle) * 0.14;
+    if (this.y > h - margin) this.angle += (-Math.PI / 2 - this.angle) * 0.14;
+
+    // Strict Text Exclusion: When NOT hunting food, do not allow fishes to roam around/behind text!
+    // "Make sure there are either on the right side or on the bottom of the text by default."
+    // "Feeding can take them anywhere btw"
+    if (!huntingFood) {
+      const box = this.pond.getTextExclusionBox();
+      const insideX = this.x < box.right;
+      const insideY = this.y < box.bottom;
+
+      if (insideX && insideY) {
+        // Inside forbidden text zone: steer to the closest escape (right or down)
+        const distToRight = box.right - this.x;
+        const distToBottom = box.bottom - this.y;
+
+        if (distToRight < distToBottom || box.bottom > (h - 100)) {
+          // Steer directly right (heading 0)
+          this.angle += (0 - this.angle) * Math.min(dt * 7, 1);
+        } else {
+          // Steer directly down (heading PI/2)
+          this.angle += (Math.PI / 2 - this.angle) * Math.min(dt * 7, 1);
+        }
+      } else {
+        // Approaching text box from right: prevent turning left into it
+        if (this.x < box.right + 50 && this.y < box.bottom && Math.cos(this.angle) < 0) {
+          this.angle += (0 - this.angle) * Math.min(dt * 5, 1);
+        }
+        // Approaching text box from bottom: prevent turning up into it
+        if (this.y < box.bottom + 50 && this.x < box.right && Math.sin(this.angle) < 0) {
+          this.angle += (Math.PI / 2 - this.angle) * Math.min(dt * 5, 1);
+        }
+      }
+    }
 
     // Dampen speed back to base
     this.speed += (this.baseSpeed - this.speed) * dt * 2;
