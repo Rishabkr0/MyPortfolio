@@ -217,11 +217,12 @@ ul, ol {
 
 .display-hero {
   font-family: var(--font-display);
-  font-size: clamp(3rem, 7vw, 5.5rem);
+  font-size: clamp(2.25rem, 5.2vw, 5.25rem);
   font-weight: 800;
   line-height: 0.94;
   letter-spacing: -0.04em;
   text-transform: lowercase;
+  white-space: nowrap;
 }
 
 .headline-xl {
@@ -818,20 +819,35 @@ ul, ol {
 
 .hero-headline-wrap {
   position: relative;
+  white-space: nowrap;
 }
 
 .hero-title {
   margin: 0;
   color: var(--surface-lowest);
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
+  white-space: nowrap;
 }
 
 .hero-title-line2 {
   display: inline-flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   align-items: center;
   column-gap: 0.75rem;
-  row-gap: 0.5rem;
+  white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+  .display-hero {
+    font-size: clamp(1.75rem, 5vw, 2.75rem);
+  }
+  .hero-title-line2 {
+    column-gap: 0.35rem;
+  }
+  .hero-title-line2 .pill-badge {
+    padding: 0.2rem 0.45rem;
+    font-size: 0.6rem;
+  }
 }
 
 .hero-grid-sub {
