@@ -845,18 +845,12 @@ ul, ol {
 }
 
 .hero-grid-sub {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 1rem;
-  align-items: flex-end;
+  display: flex;
+  flex-direction: column;
+  gap: 1.125rem;
+  align-items: flex-start;
   padding-top: 0.5rem;
-  max-width: 58rem;
-}
-
-@media (min-width: 1024px) {
-  .hero-grid-sub {
-    grid-template-columns: 7fr 5fr;
-  }
+  max-width: 48rem;
 }
 
 .hero-bio {
@@ -867,14 +861,16 @@ ul, ol {
 
 .hero-actions-wrap {
   display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-xs);
+  flex-wrap: nowrap; /* Arrange all buttons strictly in one single line */
+  align-items: center;
+  gap: 0.625rem;
   justify-content: flex-start;
+  width: auto;
 }
 
-@media (min-width: 1024px) {
+@media (max-width: 480px) {
   .hero-actions-wrap {
-    justify-content: flex-end;
+    flex-wrap: wrap;
   }
 }
 
