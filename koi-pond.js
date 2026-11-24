@@ -65,23 +65,25 @@ class KoiPond {
   }
 
   getTextBounds() {
-    // Calculates bounding box of the big text container in canvas-relative pixels
-    const heroText = document.querySelector('.hero-headline-wrap') || document.querySelector('.hero-content');
-    if (!heroText) {
+    // Calculates bounding box of the big text headline in canvas-relative pixels
+    const heroHeadline = document.querySelector('.hero-headline-wrap') || document.querySelector('.hero-title');
+    if (!heroHeadline) {
       return {
-        right: Math.min(this.width * 0.48, 540),
-        bottom: Math.min(this.height * 0.52, 320)
+        left: 0,
+        right: Math.min(this.width * 0.65, 750),
+        top: 0,
+        bottom: Math.min(this.height * 0.45, 260)
       };
     }
 
-    const rect = heroText.getBoundingClientRect();
+    const rect = heroHeadline.getBoundingClientRect();
     const canvasRect = this.canvas.getBoundingClientRect();
 
     return {
       left: 0,
-      right: Math.max((rect.right - canvasRect.left) + 28, 240),
+      right: Math.max((rect.right - canvasRect.left) + 20, 240),
       top: 0,
-      bottom: Math.max((rect.bottom - canvasRect.top) + 24, 200)
+      bottom: Math.max((rect.bottom - canvasRect.top) + 20, 180)
     };
   }
 

@@ -217,10 +217,10 @@ ul, ol {
 
 .display-hero {
   font-family: var(--font-display);
-  font-size: clamp(2.35rem, 5.2vw, 4.25rem);
+  font-size: clamp(3rem, 7vw, 5.5rem);
   font-weight: 800;
-  line-height: 0.98;
-  letter-spacing: -0.035em;
+  line-height: 0.94;
+  letter-spacing: -0.04em;
   text-transform: lowercase;
 }
 
@@ -774,11 +774,8 @@ ul, ol {
   z-index: 2;
   display: flex;
   flex-direction: column;
-  gap: var(--space-lg);
+  gap: var(--space-xl);
   pointer-events: none; /* Allows clicks to reach koi canvas behind */
-  max-width: 52rem; /* Anchored to the left side, leaving right open for koi */
-  margin-left: 0;
-  margin-right: auto;
 }
 
 /* Ensure all interactive buttons, pills, links inside hero receive mouse events */
@@ -821,8 +818,6 @@ ul, ol {
 
 .hero-headline-wrap {
   position: relative;
-  max-width: 48rem;
-  text-align: left;
 }
 
 .hero-title {
@@ -840,17 +835,22 @@ ul, ol {
 }
 
 .hero-grid-sub {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-md);
-  max-width: 44rem;
-  text-align: left;
-  padding-top: var(--space-xs);
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-lg);
+  align-items: flex-end;
+  padding-top: var(--space-md);
+}
+
+@media (min-width: 1024px) {
+  .hero-grid-sub {
+    grid-template-columns: 7fr 5fr;
+  }
 }
 
 .hero-bio {
   color: var(--surface-high);
-  max-width: 42rem;
+  max-width: 44rem;
   line-height: 1.65;
 }
 
@@ -858,7 +858,13 @@ ul, ol {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-xs);
-  justify-content: flex-start; /* Kept left-aligned */
+  justify-content: flex-start;
+}
+
+@media (min-width: 1024px) {
+  .hero-actions-wrap {
+    justify-content: flex-end;
+  }
 }
 
 /* Bottom Left Pond HUD */
