@@ -1,11 +1,3 @@
-/**
- * ============================================================================
- * KOI POND ENGINE — PIXEL / SQUARE MOSAIC CANVAS SIMULATION
- * Inspired by Kai Linh's tactile square-matrix koi pond
- * 100% Pure Vanilla HTML5 Canvas & Physics (Zero Dependencies)
- * ============================================================================
- */
-
 class KoiPond {
   constructor(canvasId, hudConfig = {}) {
     this.canvas = document.getElementById(canvasId);
@@ -29,7 +21,6 @@ class KoiPond {
     this.rafId = null;
     this.lastTime = performance.now();
 
-    // Palettes matching reference artwork: Cobalt Blue, Terracotta/Orange, Peach, Translucent White
     this.palettes = {
       sanke: {
         base: ['#1E40AF', '#1D4ED8', '#2563EB', '#1E3A8A'],
@@ -68,13 +59,10 @@ class KoiPond {
     this.handleResize();
     window.addEventListener('resize', () => this.handleResize());
 
-    // Spawn 7 Koi (matching reference 'koi 07')
     this.spawnPresetSchool();
 
-    // Event Listeners for feeding & ripples
     this.bindEvents();
 
-    // Auto-pause when scrolled out of view for 60fps battery efficiency
     this.setupIntersectionObserver();
 
     this.start();
@@ -101,9 +89,7 @@ class KoiPond {
     const parent = this.canvas.parentElement;
     if (!parent) return;
 
-    // Click to drop food & trigger square ripple
     parent.addEventListener('click', (e) => {
-      // If clicking interactive buttons/links, ignore
       if (e.target.closest('a, button, input, textarea')) return;
 
       const rect = this.canvas.getBoundingClientRect();
@@ -114,7 +100,6 @@ class KoiPond {
       this.addRipple(x, y, '#2563EB');
     });
 
-    // Mouse move tracking
     parent.addEventListener('mousemove', (e) => {
       const rect = this.canvas.getBoundingClientRect();
       this.mouse.x = e.clientX - rect.left;
@@ -128,7 +113,6 @@ class KoiPond {
       this.mouse.y = -1000;
     });
 
-    // Touch support for mobile devices
     parent.addEventListener('touchstart', (e) => {
       if (e.target.closest('a, button, input, textarea')) return;
       const touch = e.touches[0];
@@ -147,21 +131,13 @@ class KoiPond {
   spawnPresetSchool() {
     this.koi = [];
 
-    // Configurations strictly on the right side or along the bottom of the text
     const configs = [
-      // 1. Large Alpha Sanke (Right side)
       { xRatio: 0.84, yRatio: 0.38, type: 'sanke', scale: 1.25, angle: -0.85, speed: 0.95 },
-      // 2. Large Kohaku (Right top)
       { xRatio: 0.88, yRatio: 0.18, type: 'kohaku', scale: 1.15, angle: 1.8, speed: 0.9 },
-      // 3. Medium Pale Sanke (Bottom right)
       { xRatio: 0.76, yRatio: 0.78, type: 'sanke', scale: 0.95, angle: -2.2, speed: 0.85 },
-      // 4. Medium Sanke (Bottom area underneath the text)
       { xRatio: 0.35, yRatio: 0.85, type: 'sanke', scale: 1.0, angle: 0.2, speed: 1.0 },
-      // 5. Cobalt Indigo Koi (Right middle)
       { xRatio: 0.92, yRatio: 0.58, type: 'cobalt', scale: 0.85, angle: -1.4, speed: 1.15 },
-      // 6. Swift Cobalt Minnow 1 (Bottom area wanderer)
       { xRatio: 0.52, yRatio: 0.88, type: 'minnow', scale: 0.65, angle: 3.1, speed: 1.4 },
-      // 7. Swift Cobalt Minnow 2 (Right side top)
       { xRatio: 0.78, yRatio: 0.12, type: 'minnow', scale: 0.6, angle: 1.2, speed: 1.35 }
     ];
 
@@ -176,8 +152,8 @@ class KoiPond {
     }
   }
 
+  // Keeps wandering koi out of the hero headline area
   getTextExclusionBox() {
-    // Calculates bounding area of the hero headline/content so koi do not swim behind or around it by default
     const headline = document.querySelector('.hero-headline-wrap');
     if (!headline || !this.canvas) {
       return {
@@ -191,7 +167,6 @@ class KoiPond {
     const cRect = this.canvas.getBoundingClientRect();
     const hRect = headline.getBoundingClientRect();
 
-    // Clearance buffer so koi don't crowd the text boundaries
     const buffer = 45;
     const right = Math.min((hRect.right - cRect.left) + buffer, this.width - 120);
     const bottom = Math.min((hRect.bottom - cRect.top) + buffer, this.height - 80);
@@ -206,7 +181,7 @@ class KoiPond {
 
   addFood(x, y) {
     if (this.foods.length >= 12) {
-      this.foods.shift(); // keep max 12 pellets for neat pond
+      this.foods.shift();
     }
 
     this.foods.push({
@@ -277,7 +252,6 @@ class KoiPond {
   }
 
   update(dt) {
-    // 1. Update Food Pellets
     for (let i = this.foods.length - 1; i >= 0; i--) {
       const f = this.foods[i];
       f.pulse += dt * 4;
@@ -286,7 +260,6 @@ class KoiPond {
       }
     }
 
-    // 2. Update Ripples
     for (let i = this.ripples.length - 1; i >= 0; i--) {
       const r = this.ripples[i];
       r.radius += dt * 38;
@@ -296,28 +269,22 @@ class KoiPond {
       }
     }
 
-    // 3. Update Koi
     this.koi.forEach(fish => fish.update(dt));
   }
 
   draw() {
     this.ctx.clearRect(0, 0, this.width, this.height);
 
-    // Draw Subtle Mosaic Grid Water Background
     this.drawWaterGrid();
 
-    // Draw Ripples (Geometric Square Rings)
     this.drawRipples();
 
-    // Draw Food Pellets (Pulsing Pixel Squares)
     this.drawFood();
 
-    // Draw All Pixel Koi Fish
     this.koi.forEach(fish => fish.draw(this.ctx));
   }
 
   drawWaterGrid() {
-    // Elegant barely-there water grid pattern
     const step = 28;
     this.ctx.save();
     this.ctx.fillStyle = 'rgba(20, 20, 18, 0.015)';
@@ -327,7 +294,6 @@ class KoiPond {
 
     for (let x = startX; x < this.width; x += step) {
       for (let y = startY; y < this.height; y += step) {
-        // Micro square dots in a quiet grid
         this.ctx.fillRect(x, y, 1.5, 1.5);
       }
     }
@@ -340,11 +306,9 @@ class KoiPond {
       this.ctx.strokeStyle = `rgba(37, 99, 235, ${Math.max(r.alpha, 0)})`;
       this.ctx.lineWidth = 1.2;
 
-      // Draw concentric square ripple
       const rHalf = r.radius;
       this.ctx.strokeRect(r.x - rHalf, r.y - rHalf, rHalf * 2, rHalf * 2);
 
-      // Inner faint square
       if (r.radius > 16) {
         const innerHalf = r.radius * 0.55;
         this.ctx.strokeStyle = `rgba(37, 99, 235, ${Math.max(r.alpha * 0.45, 0)})`;
@@ -357,12 +321,10 @@ class KoiPond {
   drawFood() {
     this.ctx.save();
     this.foods.forEach(f => {
-      // Outer square beacon
       const pulseSize = f.size + Math.sin(f.pulse) * 1.5;
       this.ctx.fillStyle = 'rgba(234, 88, 12, 0.85)';
       this.ctx.fillRect(f.x - pulseSize / 2, f.y - pulseSize / 2, pulseSize, pulseSize);
 
-      // Inner intense core
       this.ctx.fillStyle = '#FFFFFF';
       this.ctx.fillRect(f.x - 1.5, f.y - 1.5, 3, 3);
     });
@@ -370,10 +332,6 @@ class KoiPond {
   }
 }
 
-
-/**
- * PixelKoi: Represents a koi constructed out of square mosaic tiles
- */
 class PixelKoi {
   constructor(pond, x, y, type = 'sanke', scale = 1, angle = 0, speed = 1) {
     this.pond = pond;
@@ -388,18 +346,15 @@ class PixelKoi {
     this.speed = this.baseSpeed;
     this.turnSpeed = 1.8 + Math.random() * 0.6;
 
-    // Animation waves
     this.wigglePhase = Math.random() * Math.PI * 2;
     this.wiggleFreq = 3.6;
     this.wiggleAmp = 0.22;
 
-    // Spine length and segments
     this.numSegments = type === 'minnow' ? 8 : 15;
     this.segmentDist = (type === 'minnow' ? 4.5 : 6.2) * scale;
     this.tileSize = Math.round((type === 'minnow' ? 5 : 7.2) * scale);
     this.tileGap = 1.0;
 
-    // Initialize Spine
     this.spine = [];
     for (let i = 0; i < this.numSegments; i++) {
       this.spine.push({
@@ -409,13 +364,10 @@ class PixelKoi {
       });
     }
 
-    // Palette
     this.palette = pond.palettes[type] || pond.palettes.sanke;
 
-    // Generate Body Matrix & Patch Map
     this.bodyStructure = this.buildBodyStructure(type);
 
-    // AI Wandering
     this.wanderTimer = Math.random() * 3;
     this.wanderTargetX = this.x;
     this.wanderTargetY = this.y;
@@ -423,8 +375,6 @@ class PixelKoi {
   }
 
   buildBodyStructure(type) {
-    // Defines each row from snout (0) to tail tip (N)
-    // row = { count: numberOfSquares, hasFins: boolean, finLength: number }
     if (type === 'minnow') {
       return [
         { count: 1, fins: false },
@@ -439,22 +389,22 @@ class PixelKoi {
     }
 
     return [
-      { count: 2, fins: false },            // Row 0: Mouth / Whiskers
-      { count: 3, fins: false },            // Row 1: Snout
-      { count: 4, fins: false },            // Row 2: Forehead
-      { count: 5, fins: false, eyes: true },// Row 3: Eyes & head
-      { count: 5, fins: true, finLen: 2 },  // Row 4: Shoulders & Pectoral start
-      { count: 6, fins: true, finLen: 3 },  // Row 5: Main pectoral fin row
-      { count: 6, fins: true, finLen: 2 },  // Row 6: Rear pectoral
-      { count: 5, fins: false },            // Row 7: Mid-body
-      { count: 5, fins: false },            // Row 8: Belly
-      { count: 4, fins: true, finLen: 2 },  // Row 9: Pelvic fins
-      { count: 4, fins: false },            // Row 10: Waist
-      { count: 3, fins: false },            // Row 11: Tail base
-      { count: 2, fins: false },            // Row 12: Narrow caudal stalk
-      { count: 2, fins: false },            // Row 13: Caudal base
-      { count: 4, fins: false, tail: true },// Row 14: Caudal fan
-      { count: 5, fins: false, tail: true } // Row 15: Caudal tip
+      { count: 2, fins: false },
+      { count: 3, fins: false },
+      { count: 4, fins: false },
+      { count: 5, fins: false, eyes: true },
+      { count: 5, fins: true, finLen: 2 },
+      { count: 6, fins: true, finLen: 3 },
+      { count: 6, fins: true, finLen: 2 },
+      { count: 5, fins: false },
+      { count: 5, fins: false },
+      { count: 4, fins: true, finLen: 2 },
+      { count: 4, fins: false },
+      { count: 3, fins: false },
+      { count: 2, fins: false },
+      { count: 2, fins: false },
+      { count: 4, fins: false, tail: true },
+      { count: 5, fins: false, tail: true }
     ];
   }
 
@@ -464,24 +414,20 @@ class PixelKoi {
     const h = this.pond.height || 600;
     const box = this.pond.getTextExclusionBox();
 
-    // "Make sure there are either on the right side or on the bottom of the text by default."
     const canDoBottom = box.bottom < (h - margin - 50);
     const canDoRight = box.right < (w - margin - 60);
 
     let chooseBottom = false;
     if (canDoBottom && canDoRight) {
-      // 50% right side, 50% bottom area below text
       chooseBottom = Math.random() < 0.5;
     } else if (canDoBottom) {
       chooseBottom = true;
     }
 
     if (chooseBottom) {
-      // Zone: Bottom area underneath the text
       this.wanderTargetX = margin + Math.random() * (w - margin * 2);
       this.wanderTargetY = box.bottom + Math.random() * Math.max(h - margin - box.bottom, 60);
     } else {
-      // Zone: Right side of the text
       const minX = Math.min(box.right + 10, w - 180);
       this.wanderTargetX = minX + Math.random() * Math.max(w - margin - minX, 100);
       this.wanderTargetY = margin + Math.random() * (h - margin * 2);
@@ -493,14 +439,11 @@ class PixelKoi {
   update(dt) {
     this.wigglePhase += dt * this.wiggleFreq * (this.speed / this.baseSpeed);
 
-    // 1. Check for Food Pellets
-    // "Feeding can take them anywhere btw"
     let targetX = this.wanderTargetX;
     let targetY = this.wanderTargetY;
     let huntingFood = false;
 
     if (this.pond.foods.length > 0) {
-      // Find closest uneaten food
       let closestDist = Infinity;
       let closestFood = null;
 
@@ -518,25 +461,22 @@ class PixelKoi {
       if (closestFood) {
         targetX = closestFood.x;
         targetY = closestFood.y;
-        huntingFood = true; // Feeding allows swimming anywhere!
+        huntingFood = true;
 
-        // Eat food when reached
         if (closestDist < 16 * this.scale) {
           closestFood.eaten = true;
           this.pond.addRipple(closestFood.x, closestFood.y, '#EA580C');
-          this.speed = this.baseSpeed * 1.5; // spurt of joy
+          this.speed = this.baseSpeed * 1.5;
         }
       }
     }
 
-    // 2. Cursor Avoidance / Interaction
     if (!huntingFood && this.pond.mouse.active) {
       const dx = this.pond.mouse.x - this.x;
       const dy = this.pond.mouse.y - this.y;
       const dist = Math.hypot(dx, dy);
 
       if (dist < 140) {
-        // Glide smoothly away from cursor
         const steerAway = Math.atan2(this.y - this.pond.mouse.y, this.x - this.pond.mouse.x);
         targetX = this.x + Math.cos(steerAway) * 200;
         targetY = this.y + Math.sin(steerAway) * 200;
@@ -544,7 +484,6 @@ class PixelKoi {
       }
     }
 
-    // 3. Wander Timer
     if (!huntingFood) {
       this.wanderTimer -= dt;
       if (this.wanderTimer <= 0) {
@@ -552,67 +491,53 @@ class PixelKoi {
       }
     }
 
-    // 4. Steer towards target
     const angleToTarget = Math.atan2(targetY - this.y, targetX - this.x);
     let diff = angleToTarget - this.angle;
 
-    // Normalize angle difference to -PI..PI
     while (diff < -Math.PI) diff += Math.PI * 2;
     while (diff > Math.PI) diff -= Math.PI * 2;
 
     this.angle += diff * Math.min(this.turnSpeed * dt, 1);
 
-    // 5. Margin Repulsion & Text Exclusion Zone
     const margin = 45;
     const w = this.pond.width;
     const h = this.pond.height;
 
-    // Canvas boundary margins
     if (this.x < margin) this.angle += (0 - this.angle) * 0.14;
     if (this.x > w - margin) this.angle += (Math.PI - this.angle) * 0.14;
     if (this.y < margin) this.angle += (Math.PI / 2 - this.angle) * 0.14;
     if (this.y > h - margin) this.angle += (-Math.PI / 2 - this.angle) * 0.14;
 
-    // Strict Text Exclusion: When NOT hunting food, do not allow fishes to roam around/behind text!
-    // "Make sure there are either on the right side or on the bottom of the text by default."
-    // "Feeding can take them anywhere btw"
+    // Bypass text exclusion while chasing food
     if (!huntingFood) {
       const box = this.pond.getTextExclusionBox();
       const insideX = this.x < box.right;
       const insideY = this.y < box.bottom;
 
       if (insideX && insideY) {
-        // Inside forbidden text zone: steer to the closest escape (right or down)
         const distToRight = box.right - this.x;
         const distToBottom = box.bottom - this.y;
 
         if (distToRight < distToBottom || box.bottom > (h - 100)) {
-          // Steer directly right (heading 0)
           this.angle += (0 - this.angle) * Math.min(dt * 7, 1);
         } else {
-          // Steer directly down (heading PI/2)
           this.angle += (Math.PI / 2 - this.angle) * Math.min(dt * 7, 1);
         }
       } else {
-        // Approaching text box from right: prevent turning left into it
         if (this.x < box.right + 50 && this.y < box.bottom && Math.cos(this.angle) < 0) {
           this.angle += (0 - this.angle) * Math.min(dt * 5, 1);
         }
-        // Approaching text box from bottom: prevent turning up into it
         if (this.y < box.bottom + 50 && this.x < box.right && Math.sin(this.angle) < 0) {
           this.angle += (Math.PI / 2 - this.angle) * Math.min(dt * 5, 1);
         }
       }
     }
 
-    // Dampen speed back to base
     this.speed += (this.baseSpeed - this.speed) * dt * 2;
 
-    // 6. Move Head Position
     this.x += Math.cos(this.angle) * this.speed * dt;
     this.y += Math.sin(this.angle) * this.speed * dt;
 
-    // Update Spine using Inverse Kinematics with gentle lateral wave
     this.spine[0].x = this.x;
     this.spine[0].y = this.y;
     this.spine[0].angle = this.angle;
@@ -625,7 +550,6 @@ class PixelKoi {
       const dy = cur.y - prev.y;
       const angle = Math.atan2(dy, dx);
 
-      // Distance constraint
       cur.x = prev.x + Math.cos(angle) * this.segmentDist;
       cur.y = prev.y + Math.sin(angle) * this.segmentDist;
       cur.angle = angle;
@@ -637,19 +561,15 @@ class PixelKoi {
 
     ctx.save();
 
-    // 1. Draw Pectoral & Pelvic Fins First (under the body)
     this.drawFins(ctx, step);
 
-    // 2. Draw Main Body Square Grid Rows
     for (let r = 0; r < this.spine.length; r++) {
       const seg = this.spine[r];
       const rowInfo = this.bodyStructure[r] || { count: 2 };
       const count = rowInfo.count;
 
-      // Lateral sine wave wiggle factor for natural spine undulation
       const wave = Math.sin(this.wigglePhase - r * 0.42) * (r * 0.65 * this.scale);
 
-      // Normal vector perpendicular to segment angle
       const nx = -Math.sin(seg.angle);
       const ny = Math.cos(seg.angle);
 
@@ -658,7 +578,6 @@ class PixelKoi {
         const tx = seg.x + nx * offset;
         const ty = seg.y + ny * offset;
 
-        // Determine Tile Color based on position and type
         const color = this.getTileColor(r, c, count);
 
         this.drawSquareTile(ctx, tx, ty, this.tileSize, seg.angle, color, r, c);
@@ -669,7 +588,6 @@ class PixelKoi {
   }
 
   drawFins(ctx, step) {
-    // Draw trailing square fin elements that sway with the swimming wave
     for (let r = 0; r < this.spine.length; r++) {
       const seg = this.spine[r];
       const rowInfo = this.bodyStructure[r];
@@ -680,10 +598,8 @@ class PixelKoi {
       const nx = -Math.sin(seg.angle);
       const ny = Math.cos(seg.angle);
 
-      // Fin sway lag
       const finSway = Math.sin(this.wigglePhase * 1.2 - r * 0.3) * 0.35;
 
-      // Left and right fins
       [-1, 1].forEach(side => {
         const baseOffset = (side * ((count - 1) / 2 + 1)) * step;
 
@@ -698,7 +614,6 @@ class PixelKoi {
       });
     }
 
-    // Whiskers at head (Row 0)
     if (this.type !== 'minnow' && this.spine.length > 0) {
       const head = this.spine[0];
       const nx = -Math.sin(head.angle);
@@ -714,24 +629,20 @@ class PixelKoi {
   }
 
   getTileColor(row, col, totalCols) {
-    // Generates color pattern matching the iconic Kai Linh Sanke / Kohaku / Cobalt look
     const normRow = row / this.spine.length;
     const isEdge = col === 0 || col === totalCols - 1;
 
     if (this.type === 'sanke') {
-      // Big bold terracotta orange patch on back / mid-body
       const isOrangePatch = (row >= 4 && row <= 8 && col >= 1 && col <= totalCols - 2) ||
                             (row === 2 && col === 1);
       if (isOrangePatch) {
         return this.palette.accent[Math.floor(Math.sin(row + col) * 1.5 + 2) % this.palette.accent.length];
       }
 
-      // Tail fins: translucent white
       if (normRow > 0.82) {
         return this.palette.light[0];
       }
 
-      // Edge shading or pure cobalt body
       if (isEdge && normRow > 0.3) {
         return this.palette.base[0];
       }
@@ -740,7 +651,6 @@ class PixelKoi {
     }
 
     if (this.type === 'kohaku') {
-      // Vibrant orange body with clean white patches
       const isWhitePatch = (row >= 6 && row <= 9 && (col === 1 || col === 2)) || normRow > 0.8;
       if (isWhitePatch) {
         return this.palette.light[0];
@@ -749,13 +659,11 @@ class PixelKoi {
     }
 
     if (this.type === 'cobalt') {
-      // Monochromatic royal cobalt blue with light azure highlights
       if (normRow > 0.82) return this.palette.light[0];
       if (row % 3 === 0 && col === 1) return this.palette.accent[1];
       return this.palette.base[(row + col) % this.palette.base.length];
     }
 
-    // Minnow: Sleek deep blue
     return this.palette.base[(row + col) % this.palette.base.length];
   }
 
@@ -764,12 +672,9 @@ class PixelKoi {
     ctx.translate(x, y);
     ctx.rotate(angle);
 
-    // Main Square Fill
     ctx.fillStyle = color;
     ctx.fillRect(-size / 2, -size / 2, size, size);
 
-    // Micro-glyph / dot details (just like in the reference image)
-    // On select tiles, render a subtle micro-dot or plus for retro mosaic charm
     if ((r * 3 + c) % 5 === 0 && size >= 6 && !color.includes('rgba')) {
       ctx.fillStyle = 'rgba(255, 255, 255, 0.35)';
       ctx.fillRect(-0.8, -0.8, 1.6, 1.6);
@@ -779,7 +684,6 @@ class PixelKoi {
   }
 }
 
-// Auto-instantiate when DOM is ready if canvas exists
 document.addEventListener('DOMContentLoaded', () => {
   if (document.getElementById('koiPondCanvas')) {
     window.koiPondInstance = new KoiPond('koiPondCanvas', {

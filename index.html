@@ -7,46 +7,36 @@
   <meta name="description" content="Portfolio of Rishab Kumar, 2nd year CSE undergraduate at Shri Ramswaroop Memorial University building resilient software, autonomous AI workflows, and zero-server web utilities.">
   <meta name="theme-color" content="#F4F2EC">
 
-  <!-- Open Graph / Social Sharing -->
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://rishabkr0.github.io/MyPortfolio/">
   <meta property="og:title" content="Rishab Kumar — Resilient Software & AI Products">
   <meta property="og:description" content="Portfolio of Rishab Kumar, 2nd year CSE undergraduate at Shri Ramswaroop Memorial University building resilient software, autonomous AI workflows, and zero-server web utilities.">
   <meta property="og:image" content="https://rishabkr0.github.io/MyPortfolio/assets/images/casper-studio.png">
 
-  <!-- Twitter Meta -->
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://rishabkr0.github.io/MyPortfolio/">
   <meta property="twitter:title" content="Rishab Kumar — Resilient Software & AI Products">
   <meta property="twitter:description" content="Portfolio of Rishab Kumar, 2nd year CSE undergraduate at Shri Ramswaroop Memorial University building resilient software, autonomous AI workflows, and zero-server web utilities.">
   <meta property="twitter:image" content="https://rishabkr0.github.io/MyPortfolio/assets/images/casper-studio.png">
 
-  <!-- Pixel Koi Favicon -->
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23141412'/><rect x='8' y='8' width='8' height='8' fill='%231E40AF'/><rect x='16' y='16' width='8' height='8' fill='%23EA580C'/></svg>">
 
-  <!-- Google Fonts: Syne, JetBrains Mono, & Newsreader (Zero JS Frameworks) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@1,6..72,400;1,6..72,600&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
 
-  <!-- Pure Custom Stylesheet -->
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <!-- ==========================================
-       SITE HEADER / SMART STICKY NAVIGATION
-       ========================================== -->
   <header class="site-header">
     <div class="section-wrapper">
       <div class="container header-inner">
-        <!-- Brand Identifier -->
         <a href="#" class="brand-link">
           <span class="brand-name">Rishab Kumar</span>
           <span class="brand-tag">/portfolio</span>
         </a>
 
-        <!-- Desktop Navigation -->
         <nav class="site-nav" aria-label="Main Navigation">
           <a href="#pond" class="nav-link active">pond</a>
           <a href="#work" class="nav-link">projects</a>
@@ -55,7 +45,6 @@
           <a href="#contact" class="nav-link">about</a>
         </nav>
 
-        <!-- Right Header Action (HelloAkriti Dual Arrow Slide) -->
         <div class="header-actions">
           <a href="#contact" class="btn-header-cta">
             <span>start a project</span>
@@ -70,7 +59,6 @@
               </svg>
             </span>
           </a>
-          <!-- Mobile Hamburger Menu Button -->
           <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle navigation menu" aria-expanded="false">
             <span></span>
             <span></span>
@@ -80,7 +68,6 @@
       </div>
     </div>
 
-    <!-- Collapsible Mobile Drawer -->
     <div class="mobile-nav-drawer" id="mobileNavDrawer">
       <a href="#pond" class="nav-link">pond</a>
       <a href="#work" class="nav-link">projects</a>
@@ -91,14 +78,9 @@
   </header>
 
   <main>
-    <!-- ==========================================
-         SECTION 1: HERO (With Pixel-Square Koi Swimming Behind Text)
-         ========================================== -->
     <section class="hero-section section-wrapper" id="pond">
-      <!-- Interactive HTML5 Pixel Koi Canvas (Floating Behind Original Text) -->
       <canvas id="koiPondCanvas" class="koi-pond-canvas" aria-label="Interactive pixel koi pond canvas simulation"></canvas>
 
-      <!-- Ambient Drifting Mosaic Square Tiles -->
       <span class="pixel-tile-drifter drifter-1"></span>
       <span class="pixel-tile-drifter drifter-2"></span>
       <span class="pixel-tile-drifter drifter-3"></span>
@@ -106,7 +88,6 @@
       <span class="pixel-tile-drifter drifter-5"></span>
 
       <div class="container hero-content">
-        <!-- Monospace Overline Status -->
         <div class="status-badge-row reveal-on-scroll">
           <span class="beacon-dot beacon-dot-pulse"></span>
           <span class="caption-caps" style="color: var(--text-muted); letter-spacing: 0.08em;">
@@ -114,7 +95,6 @@
           </span>
         </div>
 
-        <!-- Hero Headline -->
         <div class="hero-headline-wrap reveal-on-scroll reveal-delay-1">
           <h1 class="display-hero hero-title">
             building resilient software<br>
@@ -122,7 +102,6 @@
           </h1>
         </div>
 
-        <!-- Subtitle & Quick Actions Matrix -->
         <div class="hero-grid-sub reveal-on-scroll reveal-delay-2">
           <div>
             <p class="body-lg hero-bio">
@@ -142,7 +121,6 @@
           </div>
         </div>
 
-        <!-- Interactive Koi Pond Micro-HUD at Bottom -->
         <div class="pond-hud reveal-on-scroll">
           <div class="hud-counters">
             <span class="hud-item"><span class="hud-label">koi</span> <strong id="koiCount">07</strong></span>
@@ -153,12 +131,8 @@
       </div>
     </section>
 
-    <!-- ==========================================
-         SECTION 2: SELECTED WORK (2-Column Grid + Cursor Badge)
-         ========================================== -->
     <section class="work-section section-wrapper" id="work">
       <div class="container">
-        <!-- Section Header -->
         <div class="section-head reveal-on-scroll">
           <div>
             <span class="caption-caps section-meta-tag">
@@ -174,10 +148,8 @@
           </p>
         </div>
 
-        <!-- 2-Column Work Showcase Grid -->
         <div class="work-grid">
 
-          <!-- Card 1: CASPER -->
           <article class="project-card reveal-on-scroll">
             <div class="project-media-wrap" data-lightbox="true" data-lightbox-title="C.A.S.P.E.R Autonomous AI Assistant">
               <div class="card-square-corners"><span class="c-sq c-tl">■</span><span class="c-sq c-tr">■</span><span class="c-sq c-bl">■</span><span class="c-sq c-br">■</span></div>
@@ -208,7 +180,6 @@
             </div>
           </article>
 
-          <!-- Card 2: ToolHub -->
           <article class="project-card reveal-on-scroll reveal-delay-1">
             <div class="project-media-wrap" data-lightbox="true" data-lightbox-title="ToolHub All-in-One Privacy-First Tools">
               <div class="card-square-corners"><span class="c-sq c-tl">■</span><span class="c-sq c-tr">■</span><span class="c-sq c-bl">■</span><span class="c-sq c-br">■</span></div>
@@ -239,7 +210,6 @@
             </div>
           </article>
 
-          <!-- Card 3: RCODE Systems -->
           <article class="project-card reveal-on-scroll">
             <div class="project-media-wrap" data-lightbox="true" data-lightbox-title="RCODE Systems & Interface Architectures">
               <div class="card-square-corners"><span class="c-sq c-tl">■</span><span class="c-sq c-tr">■</span><span class="c-sq c-bl">■</span><span class="c-sq c-br">■</span></div>
@@ -270,11 +240,9 @@
             </div>
           </article>
 
-          <!-- Card 4: CodeVerse IDE -->
           <article class="project-card reveal-on-scroll reveal-delay-1">
             <div class="project-media-wrap">
               <div class="card-square-corners"><span class="c-sq c-tl">■</span><span class="c-sq c-tr">■</span><span class="c-sq c-bl">■</span><span class="c-sq c-br">■</span></div>
-              <!-- Custom Interactive IDE Preview -->
               <div class="codeverse-mock">
                 <div class="codeverse-topbar">
                   <div class="codeverse-dots">
@@ -326,12 +294,8 @@
       </div>
     </section>
 
-    <!-- ==========================================
-         SECTION 3: CAPABILITIES (HelloAkriti Expandable Accordion)
-         ========================================== -->
     <section class="services-section section-wrapper" id="services">
       <div class="container services-layout-grid">
-        <!-- Left Column Brief -->
         <div class="services-sticky-sidebar reveal-on-scroll">
           <span class="caption-caps" style="color: var(--text-muted); letter-spacing: 0.12em;">
             02 / what i build
@@ -349,9 +313,7 @@
           </div>
         </div>
 
-        <!-- Right Column Stacked Accordion List (HelloAkriti Style) -->
         <div class="services-rows-list reveal-on-scroll reveal-delay-1">
-          <!-- Item 1 -->
           <div class="service-accordion-item">
             <div class="service-accordion-header">
               <div class="service-header-left">
@@ -375,7 +337,6 @@
             </div>
           </div>
 
-          <!-- Item 2 -->
           <div class="service-accordion-item">
             <div class="service-accordion-header">
               <div class="service-header-left">
@@ -399,7 +360,6 @@
             </div>
           </div>
 
-          <!-- Item 3 -->
           <div class="service-accordion-item">
             <div class="service-accordion-header">
               <div class="service-header-left">
@@ -423,7 +383,6 @@
             </div>
           </div>
 
-          <!-- Item 4 -->
           <div class="service-accordion-item">
             <div class="service-accordion-header">
               <div class="service-header-left">
@@ -447,7 +406,6 @@
             </div>
           </div>
 
-          <!-- Item 5 -->
           <div class="service-accordion-item">
             <div class="service-accordion-header">
               <div class="service-header-left">
@@ -471,7 +429,6 @@
             </div>
           </div>
 
-          <!-- Item 6 -->
           <div class="service-accordion-item">
             <div class="service-accordion-header">
               <div class="service-header-left">
@@ -498,12 +455,8 @@
       </div>
     </section>
 
-    <!-- ==========================================
-         SECTION 4: RUNNING MARQUEE TICKER (Akriti Style)
-         ========================================== -->
     <div class="marquee-ticker-bar" aria-hidden="true">
       <div class="marquee-inner-track">
-        <!-- Content Sequence 1 -->
         <div class="marquee-content-sequence">
           <span class="marquee-item">0 BYTES SERVER UPLOAD <span class="marquee-star">✳</span></span>
           <span class="marquee-item">LOCAL-FIRST AI AGENTS <span class="marquee-star">✳</span></span>
@@ -512,7 +465,7 @@
           <span class="marquee-item">SUB-100MS EXECUTION <span class="marquee-star">✳</span></span>
           <span class="marquee-item">PURE VANILLA CRAFT <span class="marquee-star">✳</span></span>
         </div>
-        <!-- Content Sequence 2 (Duplicated for Seamless Infinite Loop) -->
+        <!-- Duplicated for seamless marquee loop -->
         <div class="marquee-content-sequence">
           <span class="marquee-item">0 BYTES SERVER UPLOAD <span class="marquee-star">✳</span></span>
           <span class="marquee-item">LOCAL-FIRST AI AGENTS <span class="marquee-star">✳</span></span>
@@ -524,12 +477,8 @@
       </div>
     </div>
 
-    <!-- ==========================================
-         SECTION 5: PROJECT APPROACH (Pale Slate Canvas)
-         ========================================== -->
     <section class="approach-section section-wrapper">
       <div class="container">
-        <!-- Section Title -->
         <div class="approach-head reveal-on-scroll">
           <span class="caption-caps approach-meta-tag">
             03 / engineering methodology
@@ -539,9 +488,7 @@
           </h2>
         </div>
 
-        <!-- 3 Editorial Clean White Process Cards -->
         <div class="approach-cards-grid">
-          <!-- Step 1 -->
           <div class="approach-card reveal-on-scroll">
             <div class="approach-card-header">
               <span class="caption-caps approach-step-tag">step 01</span>
@@ -566,7 +513,6 @@
             </div>
           </div>
 
-          <!-- Step 2 -->
           <div class="approach-card reveal-on-scroll reveal-delay-1">
             <div class="approach-card-header">
               <span class="caption-caps approach-step-tag">step 02</span>
@@ -594,7 +540,6 @@
             </div>
           </div>
 
-          <!-- Step 3 -->
           <div class="approach-card reveal-on-scroll reveal-delay-2">
             <div class="approach-card-header">
               <span class="caption-caps approach-step-tag">step 03</span>
@@ -623,16 +568,11 @@
       </div>
     </section>
 
-    <!-- ==========================================
-         SECTION 6: CREATIVE EXPLORATIONS (Dark Nocturnal Canvas)
-         ========================================== -->
     <section class="explorations-section section-wrapper" id="explorations">
-      <!-- Ambient Micro-Glows -->
       <div class="glow-ambient-1"></div>
       <div class="glow-ambient-2"></div>
 
       <div class="container explorations-content-wrap">
-        <!-- Section Title -->
         <div class="explorations-head reveal-on-scroll">
           <div>
             <span class="caption-caps explorations-meta-tag">
@@ -647,9 +587,7 @@
           </p>
         </div>
 
-        <!-- Akriti-Style Angled Tilted Showcase Mosaic -->
         <div class="explorations-cards-grid">
-          <!-- Angled Card 1: A* Pathfinding Grid -->
           <div class="exploration-card tilt-left reveal-on-scroll">
             <div class="exploration-media-box">
               <canvas id="pathfindingCanvas" class="pathfinding-canvas"></canvas>
@@ -667,7 +605,6 @@
             </p>
           </div>
 
-          <!-- Angled Card 2: Sorting Algorithm Race -->
           <div class="exploration-card tilt-right reveal-on-scroll reveal-delay-1">
             <div class="exploration-media-box">
               <canvas id="sortingCanvas" class="sorting-canvas"></canvas>
@@ -685,7 +622,6 @@
             </p>
           </div>
 
-          <!-- Angled Card 3: 75% Attendance & Bunk Planner -->
           <div class="exploration-card tilt-slight reveal-on-scroll reveal-delay-2">
             <div class="exploration-media-box">
               <div class="attendance-calc-box">
@@ -734,7 +670,6 @@
           </div>
         </div>
 
-        <!-- Quick Hackathon Banner -->
         <div class="hackathon-banner reveal-on-scroll">
           <div class="hackathon-banner-left">
             <span class="banner-pulse-beacon"></span>
@@ -749,13 +684,9 @@
       </div>
     </section>
 
-    <!-- ==========================================
-         SECTION 7: CONTACT & FORM (Warm Off-White Canvas)
-         ========================================== -->
     <div id="about" style="position: relative; top: -40px; visibility: hidden;"></div>
     <section class="contact-section section-wrapper" id="contact">
       <div class="container contact-layout-grid">
-        <!-- Left Column: Large Display Headline & Pill Anchors -->
         <div class="contact-left-col reveal-on-scroll">
           <div>
             <span class="caption-caps contact-meta-tag">
@@ -769,7 +700,6 @@
             Have a project, summer internship opening, or hackathon collaboration in mind? I build fast, deploy clean code, and respect the integrity of your product.
           </p>
 
-          <!-- Pill Action Links -->
           <div class="contact-pills-wrap">
             <a href="mailto:rishabkr2005@gmail.com" class="btn-pill btn-pill-dark">
               email: rishabkr2005@gmail.com ↗
@@ -783,7 +713,6 @@
           </div>
         </div>
 
-        <!-- Right Column: Minimal Direct Ingestion Form -->
         <div class="contact-form-card reveal-on-scroll reveal-delay-1">
           <form class="contact-form" id="contactForm">
             <div class="form-group">
@@ -820,12 +749,8 @@
     </section>
   </main>
 
-  <!-- ==========================================
-       SECTION 8: SITE FOOTER (HelloAkriti Inspired)
-       ========================================== -->
   <footer class="site-footer section-wrapper">
     <div class="container footer-inner-content">
-      <!-- Top Row -->
       <div class="footer-top-row reveal-on-scroll">
         <div class="footer-top-left">
           <div class="pill-badge pill-badge-dark" style="margin-bottom: 1.5rem; display: inline-flex; align-items: center; gap: 0.5rem;">
@@ -847,7 +772,6 @@
         </div>
       </div>
 
-      <!-- Bottom Metadata Row with Live Clock -->
       <div class="footer-bottom-row">
         <div class="footer-info-meta body-sm">
           <span class="live-studio-clock" id="liveStudioClock">LUCKNOW [GMT +5:30]</span>
@@ -863,7 +787,6 @@
     </div>
   </footer>
 
-  <!-- Lightbox Modal for Full Resolution Screenshot Review -->
   <div class="lightbox-modal" id="lightboxModal" role="dialog" aria-modal="true" aria-label="Image Preview">
     <div class="lightbox-content-box">
       <button class="lightbox-close-btn" id="lightboxCloseBtn" aria-label="Close Preview">&times;</button>
@@ -872,9 +795,7 @@
     </div>
   </div>
 
-  <!-- Koi Pond Simulation Script -->
   <script src="koi-pond.js"></script>
-  <!-- Pure Vanilla JavaScript -->
   <script src="script.js"></script>
 </body>
 </html>

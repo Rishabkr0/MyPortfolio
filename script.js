@@ -1,15 +1,5 @@
-/**
- * NOCTURNE ATELIER — PORTFOLIO SCRIPT
- * Author: Rishab Kumar
- * Inspiration: HelloAkriti.com Editorial Precision & Micro-Interactions
- * 100% Pure Vanilla JavaScript (Zero Frameworks, Zero External Libraries)
- */
-
 document.addEventListener('DOMContentLoaded', () => {
 
-  // ------------------------------------------------------------------------
-  // 1. SMART STICKY HEADER (Hide on scroll down, slide in on scroll up)
-  // ------------------------------------------------------------------------
   const header = document.querySelector('.site-header');
   let lastScrollY = window.pageYOffset || document.documentElement.scrollTop;
   const scrollThreshold = 8;
@@ -19,23 +9,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const delta = currentScrollY - lastScrollY;
 
     if (currentScrollY <= 60) {
-      // Near top of page — always show header
       if (header) header.classList.remove('header-hidden');
     } else if (delta > scrollThreshold) {
-      // Scrolling down — hide header
       if (header) header.classList.add('header-hidden');
     } else if (delta < -scrollThreshold) {
-      // Scrolling up — reveal header smoothly
       if (header) header.classList.remove('header-hidden');
     }
 
     lastScrollY = currentScrollY;
   }, { passive: true });
 
-
-  // ------------------------------------------------------------------------
-  // 2. MOBILE MENU DRAWER TOGGLE
-  // ------------------------------------------------------------------------
   const mobileMenuBtn = document.getElementById('mobileMenuBtn');
   const mobileNavDrawer = document.getElementById('mobileNavDrawer');
 
@@ -55,17 +38,13 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-
-  // ------------------------------------------------------------------------
-  // 3. SCROLL REVEAL VIA INTERSECTION OBSERVER
-  // ------------------------------------------------------------------------
   const revealElements = document.querySelectorAll('.reveal-on-scroll');
   if ('IntersectionObserver' in window && revealElements.length > 0) {
     const revealObserver = new IntersectionObserver((entries, obs) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           entry.target.classList.add('is-visible');
-          obs.unobserve(entry.target); // once revealed, keep visible
+          obs.unobserve(entry.target);
         }
       });
     }, {
@@ -79,10 +58,6 @@ document.addEventListener('DOMContentLoaded', () => {
     revealElements.forEach(el => el.classList.add('is-visible'));
   }
 
-
-  // ------------------------------------------------------------------------
-  // 4. ACTIVE NAVIGATION LINK TRACKING
-  // ------------------------------------------------------------------------
   const trackedSections = document.querySelectorAll('section[id], footer[id]');
   const navLinks = document.querySelectorAll('.site-nav .nav-link, .mobile-nav-drawer .nav-link');
 
@@ -110,10 +85,6 @@ document.addEventListener('DOMContentLoaded', () => {
     trackedSections.forEach(section => sectionObserver.observe(section));
   }
 
-
-  // ------------------------------------------------------------------------
-  // 5. SERVICES ACCORDION (HelloAkriti Non-Exclusive Expandable Rows)
-  // ------------------------------------------------------------------------
   const accordionItems = document.querySelectorAll('.service-accordion-item');
 
   accordionItems.forEach(item => {
@@ -136,14 +107,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-
-  // ------------------------------------------------------------------------
-  // 7. PROJECT SCREENSHOT SWITCHER BUTTONS
-  // ------------------------------------------------------------------------
   const thumbSwitchers = document.querySelectorAll('[data-switch-target]');
   thumbSwitchers.forEach(btn => {
     btn.addEventListener('click', (e) => {
-      e.stopPropagation(); // Don't trigger lightbox immediately
+      e.stopPropagation(); // Prevent opening lightbox when switching preview
       const targetId = btn.getAttribute('data-switch-target');
       const newSrc = btn.getAttribute('data-img-src');
       const newAlt = btn.getAttribute('data-img-alt') || '';
@@ -162,10 +129,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-
-  // ------------------------------------------------------------------------
-  // 8. LIGHTBOX MODAL FOR SCREENSHOT ZOOM
-  // ------------------------------------------------------------------------
   const lightboxModal = document.getElementById('lightboxModal');
   const lightboxImg = document.getElementById('lightboxImg');
   const lightboxCaption = document.getElementById('lightboxCaption');
@@ -187,8 +150,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.querySelectorAll('.project-media-wrap[data-lightbox]').forEach(wrap => {
     wrap.addEventListener('click', (e) => {
-      // Don't trigger if user clicked a switcher button inside
-      if (e.target.closest('.project-thumb-switch')) return;
+      if (e.target.closest('.project-thumb-switch')) return; // Ignore switcher clicks
 
       const img = wrap.querySelector('img');
       if (img) {
@@ -215,11 +177,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-
-  // ------------------------------------------------------------------------
-  // 9. A* PATHFINDING CANVAS & SORTING RACE (Explorations Section)
-  // ------------------------------------------------------------------------
-  // Card 1: A* Pathfinding Grid Simulation
   const pathCanvas = document.getElementById('pathfindingCanvas');
   const pathCounter = document.getElementById('pathStepsCounter');
   if (pathCanvas) {
@@ -258,7 +215,6 @@ document.addEventListener('DOMContentLoaded', () => {
         grid.push(row);
       }
 
-      // Procedural walls with randomized openings
       const gap1 = 2 + Math.floor(Math.random() * (rows - 4));
       const gap2 = 2 + Math.floor(Math.random() * (rows - 4));
       for (let r = 0; r < rows; r++) {
@@ -358,7 +314,6 @@ document.addEventListener('DOMContentLoaded', () => {
       pCtx.fillStyle = '#0a0b0e';
       pCtx.fillRect(0, 0, w, h);
 
-      // Grid lines
       pCtx.strokeStyle = 'rgba(255, 255, 255, 0.04)';
       pCtx.lineWidth = 1;
       for (let c = 0; c <= cols; c++) {
@@ -374,7 +329,6 @@ document.addEventListener('DOMContentLoaded', () => {
         pCtx.stroke();
       }
 
-      // Walls
       for (let r = 0; r < rows; r++) {
         for (let c = 0; c < cols; c++) {
           if (grid[r][c].isWall) {
@@ -384,7 +338,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }
 
-      // Closed set (visited cells)
       for (const node of closedSet) {
         pCtx.fillStyle = 'rgba(30, 64, 175, 0.35)';
         pCtx.fillRect(node.c * cellW + 2, node.r * cellH + 2, cellW - 4, cellH - 4);
@@ -392,13 +345,11 @@ document.addEventListener('DOMContentLoaded', () => {
         pCtx.strokeRect(node.c * cellW + 2, node.r * cellH + 2, cellW - 4, cellH - 4);
       }
 
-      // Open set (frontier cells)
       for (const node of openSet) {
         pCtx.fillStyle = 'rgba(59, 130, 246, 0.2)';
         pCtx.fillRect(node.c * cellW + 2, node.r * cellH + 2, cellW - 4, cellH - 4);
       }
 
-      // Reconstructed shortest path (Terracotta Orange)
       if (path.length > 0) {
         for (const node of path) {
           pCtx.fillStyle = '#ea580c';
@@ -406,7 +357,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }
 
-      // Start & End points
       pCtx.fillStyle = '#2563eb';
       pCtx.fillRect(start.c * cellW + 3, start.r * cellH + 3, cellW - 6, cellH - 6);
 
@@ -424,7 +374,6 @@ document.addEventListener('DOMContentLoaded', () => {
     drawPathGrid();
   }
 
-  // Card 2: Sorting Algorithm Race Simulation (Quicksort with pivot highlight)
   const sortCanvas = document.getElementById('sortingCanvas');
   const sortCounter = document.getElementById('sortSwapsCounter');
   if (sortCanvas) {
@@ -453,7 +402,6 @@ document.addEventListener('DOMContentLoaded', () => {
       comparingA = -1;
       comparingB = -1;
 
-      // Pre-compute quicksort steps
       steps = [];
       const arrCopy = [...array];
 
@@ -540,7 +488,6 @@ document.addEventListener('DOMContentLoaded', () => {
       sCtx.fillStyle = '#0a0b0e';
       sCtx.fillRect(0, 0, w, h);
 
-      // Subtle horizontal baseline
       sCtx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
       sCtx.lineWidth = 1;
       sCtx.beginPath();
@@ -565,7 +512,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         sCtx.fillRect(x, y, barW, barH);
-        // Small top accent cap
         sCtx.fillStyle = 'rgba(255, 255, 255, 0.25)';
         sCtx.fillRect(x, y, barW, 2);
       }
@@ -581,15 +527,10 @@ document.addEventListener('DOMContentLoaded', () => {
     drawSortBars();
   }
 
-
-  // ------------------------------------------------------------------------
-  // 10. HELLOAKRITI LIVE STUDIO CLOCK (Footer)
-  // ------------------------------------------------------------------------
   const studioClock = document.getElementById('liveStudioClock');
   if (studioClock) {
     const updateClock = () => {
       const now = new Date();
-      // Format as Lucknow / IST time: 1:31:48 PM
       const options = {
         timeZone: 'Asia/Kolkata',
         hour: 'numeric',
@@ -605,10 +546,6 @@ document.addEventListener('DOMContentLoaded', () => {
     setInterval(updateClock, 1000);
   }
 
-
-  // ------------------------------------------------------------------------
-  // 11. CONTACT FORM TRANSMISSION HANDLING
-  // ------------------------------------------------------------------------
   const contactForm = document.getElementById('contactForm');
   const contactStatus = document.getElementById('contactStatus');
 
@@ -637,10 +574,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-
-  // ------------------------------------------------------------------------
-  // 12. BACK TO TOP SMOOTH TRIGGER
-  // ------------------------------------------------------------------------
   const backToTopBtn = document.getElementById('backToTopBtn');
   if (backToTopBtn) {
     backToTopBtn.addEventListener('click', (e) => {
